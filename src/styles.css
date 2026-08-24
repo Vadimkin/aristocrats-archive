@@ -79,13 +79,20 @@ h2 { font-size: 15px; margin: 28px 0 6px; letter-spacing: 0.01em; }
   flex-direction: column;
   justify-content: center;
   background-color: var(--bg);
-  padding-top: env(safe-area-inset-top);
+  /* Installed to the home screen the page runs under a translucent status bar,
+     so the inset is clearance and nothing more: at 1× the logo ends up level
+     with the clock. The multiplier buys air below the status bar, and the
+     min-height keeps the band's designed height *under* the inset rather than
+     letting it eat into it. Both collapse to the old numbers in a browser tab,
+     where the inset is 0 and the toolbar already separates the two. */
+  --inset-top: env(safe-area-inset-top);
+  padding-top: calc(var(--inset-top) * 1.35);
   /* The photo runs the full width, so `cover` scales it with the viewport and
      the cat renders at roughly 0.13 × viewport width — 254px tall at 1920. A
      band that always contained it whole would therefore have to be enormous on
      desktop, so this keeps the band compact and lets the desk edge run off the
      bottom; `background-position` below keeps the head and body in frame. */
-  min-height: clamp(194px, 12vw, 270px);
+  min-height: calc(clamp(194px, 12vw, 270px) + var(--inset-top));
 }
 
 /* The photo lives on its own layer so the type above it is unaffected by the

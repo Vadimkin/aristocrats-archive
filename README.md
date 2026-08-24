@@ -157,9 +157,14 @@ mark sits well inside the 80% safe circle, so Android can round or crop the fram
 it.
 
 iOS ignores the manifest's `theme_color`, taking `apple-mobile-web-app-status-bar-style` instead.
-That is set to `black-translucent`, so the page runs under the status bar — which is what the
-masthead's `padding-top: env(safe-area-inset-top)` already allows for, and every route renders that
-dark band, so the white status-bar text has contrast everywhere.
+That is set to `black-translucent`, so the page runs under the status bar — every route renders the
+dark masthead band, so the white status-bar text has contrast everywhere.
+
+Running under the status bar means the safe-area inset is only clearance, not breathing room: at
+1× the logo sits level with the clock. So the masthead takes `padding-top:
+calc(env(safe-area-inset-top) * 1.35)` and adds the inset to its `min-height`, keeping the band's
+designed height *below* the status bar instead of letting the inset eat into it. Both terms
+collapse to the old numbers in a browser tab, where the inset is 0.
 
 ## Layout
 
