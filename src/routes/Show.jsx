@@ -47,7 +47,10 @@ export function Show({ slug }) {
         <BackRow />
 
         <div class="show-head">
-          <h1>{show.name}</h1>
+          <h1>
+            {show.name}
+            {show.host && <span class="host"> {show.host}</span>}
+          </h1>
           <div class="sub">
             {total} {episodeWord(total)}
             {years && ` · ${years}`}

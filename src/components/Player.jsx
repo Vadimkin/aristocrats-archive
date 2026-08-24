@@ -1,8 +1,8 @@
 import { useEffect, useRef } from 'preact/hooks'
 import { Link } from 'wouter-preact'
 import {
-  current, playing, stalled, time, duration, buffered, volume, expanded, error,
-  toggle, seek, skip, setVolume,
+  current, playing, stalled, time, duration, buffered, expanded, error,
+  toggle, seek,
 } from '../state/player.js'
 import { duration as fmtDuration } from '../lib/format.js'
 
@@ -89,42 +89,11 @@ function Sheet({ item, dur }) {
         </div>
       </div>
 
-      <div class="transport">
-        <button onClick={() => skip(-15)} aria-label="Назад 15 секунд">−15</button>
-        <button class="pp" onClick={toggle} aria-label={playing.value ? 'Пауза' : 'Грати'}>
-          {playing.value ? '❚❚' : '▶'}
-        </button>
-        <button onClick={() => skip(30)} aria-label="Вперед 30 секунд">+30</button>
-      </div>
-
-      <VolumeRow />
-
       <div class="sheet-row">
         <Link href={`/show/${item.slug}`} onClick={() => (expanded.value = false)}>
           {item.showName} →
         </Link>
       </div>
-    </div>
-  )
-}
-
-// iOS ignores volume changes on the media element, so this is desktop-only.
-function VolumeRow() {
-  const coarse = typeof matchMedia !== 'undefined' && matchMedia('(pointer: coarse)').matches
-  if (coarse) return null
-  return (
-    <div class="sheet-row">
-      <span class="label">Гучність</span>
-      <input
-        type="range"
-        min="0"
-        max="1"
-        step="0.05"
-        value={volume.value}
-        onInput={(e) => setVolume(Number(e.currentTarget.value))}
-        aria-label="Гучність"
-        style={{ flex: 1, accentColor: 'var(--accent)' }}
-      />
     </div>
   )
 }

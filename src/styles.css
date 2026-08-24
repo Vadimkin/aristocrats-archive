@@ -244,6 +244,13 @@ mark {
 .show-row .stats { font-size: 13px; color: var(--dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .show-row.is-done .name { color: var(--dim); }
 
+/* The host half of a show name ("Jazz Time з Олексієм Коганом") — same name,
+   quieter, so the title the archive sorts by still reads first. */
+.host { color: var(--dim); font-weight: 400; }
+.show-head h1 .host { font-size: 0.72em; }
+.show-row .name .host { font-size: 13.5px; }
+.show-row.is-done .name .host { color: var(--dimmer); }
+
 /* episode rows */
 .ep {
   display: grid;
@@ -438,17 +445,6 @@ mark {
   color: var(--dim);
   font-variant-numeric: tabular-nums;
 }
-
-.transport {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 18px;
-  padding: 8px 0 12px;
-}
-.transport button { font-size: 15px; color: var(--link); }
-.transport button:disabled { color: var(--dimmer); }
-.transport .pp { font-size: 20px; width: 52px; height: 52px; }
 
 .sheet-row {
   display: flex;

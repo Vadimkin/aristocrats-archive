@@ -176,6 +176,87 @@ function tidy(s) {
     .trim()
 }
 
+// ---------------------------------------------------------------- host appendix
+
+// Most shows repeat their host in the filename right after the show name:
+//   "Второе свидание с Ярославом Лодыгиным — Big Move"
+// Once the show prefix is stripped the host phrase reads like an episode title.
+// It is not one — it is the tail of the show's own name, so it moves into `a`
+// and the real title is whatever follows the delimiter.
+const HOST_CONNECTOR = /^(?:з|зі|із|с|со|with|from)\s+(\S.*)$/i
+
+// Delimiters the archive actually uses between host and episode title. A bare
+// hyphen only counts when spaced — "Non-stop" must stay in one piece.
+const HOST_SPLIT = /\s+[—–|·]\s*|\s+-\s+|\s*:\s+/
+
+// Words that glue a list of hosts together: "з Лодигіним, Хомутовським і Чачибая".
+const JOINERS = new Set(['і', 'и', 'й', 'та', 'and', '&'])
+
+const capitalized = (w) => w[0] !== w[0].toLowerCase()
+
+// The leading "connector + Name(s)" phrase of a title, or null when the title
+// does not open with one. Shape only — recurrence is judged per show below.
+function hostPhrase(title) {
+  const head = title.split(HOST_SPLIT)[0].trim()
+  const m = HOST_CONNECTOR.exec(head)
+  if (!m) return null
+
+  // Names only. "с Марьяной Головко_s9e1" is a filename the season/episode
+  // parser could not read — leave it whole rather than half-parse it.
+  if (/[\d_]/.test(m[1])) return null
+
+  const words = m[1].split(/[\s,]+/).filter(Boolean)
+  if (!words.length || words.length > 4) return null
+
+  const names = words.filter((w) => !JOINERS.has(w.toLowerCase()))
+  if (!names.length) return null
+  // "Із неба та вітру" is a title; "з Олексієм Коганом" is a person.
+  if (!names.every(capitalized)) return null
+
+  return head
+}
+
+// Pulls the host phrase off every episode of one show. A phrase the archive
+// repeats is a host; a one-off ("From This Place") is just a title that happens
+// to start with a preposition. Returns a count per accepted phrase.
+function attachHosts(episodes) {
+  const counts = new Map()
+  for (const ep of episodes) {
+    const head = ep.t ? hostPhrase(ep.t) : null
+    if (head) counts.set(head, (counts.get(head) ?? 0) + 1)
+  }
+
+  const accepted = new Set([...counts].filter(([, n]) => n >= 2).map(([h]) => h))
+  // Typos and case slips ("з Олексіє Коганом") show up once. Take them along
+  // when they share a long head with a phrase that does recur.
+  const recurring = [...accepted]
+  for (const [head] of counts) {
+    if (accepted.has(head) || head.length < 10) continue
+    if (recurring.some((h) => h.slice(0, 9) === head.slice(0, 9))) accepted.add(head)
+  }
+
+  const hosts = new Map()
+  for (const ep of episodes) {
+    const head = ep.t ? hostPhrase(ep.t) : null
+    if (!head || !accepted.has(head)) continue
+    if (ep.r == null) ep.r = ep.t
+    ep.a = head
+    ep.t = tidy(ep.t.slice(head.length))
+    hosts.set(head, (hosts.get(head) ?? 0) + 1)
+  }
+  return hosts
+}
+
+// The show's own host, when one phrase speaks for most of the archive: the
+// name on the tin ("Bookself Шоу з Катериною Бабкіною"), not a guest of one
+// season. Reported per show so the header can print the full name.
+function dominantHost(hosts, total) {
+  let best = null
+  for (const [head, n] of hosts) if (!best || n > best[1]) best = [head, n]
+  if (!best) return null
+  return best[1] >= 2 && best[1] / total >= 0.4 ? best[0] : null
+}
+
 // ---------------------------------------------------------------- slugs
 
 const TRANSLIT = {
@@ -236,7 +317,10 @@ function build() {
   const seenIds = new Map()
   const index = []
   const search = []
-  const stats = { episodes: 0, withDate: 0, withYear: 0, withSeasonEp: 0, prefixStripped: 0, withLen: 0 }
+  const stats = {
+    episodes: 0, withDate: 0, withYear: 0, withSeasonEp: 0, prefixStripped: 0, withLen: 0,
+    hostMoved: 0, showsWithHost: 0,
+  }
   let grandSeconds = 0
 
   for (const show of src.shows) {
@@ -311,8 +395,18 @@ function build() {
       if (date) stats.withDate++
       if (year) stats.withYear++
       if (season != null || episode != null) stats.withSeasonEp++
+    }
 
-      if (title) search.push([slug, id, title])
+    // Needs the whole show at once: a host phrase is only a host if it recurs.
+    const hosts = attachHosts(episodes)
+    const host = dominantHost(hosts, episodes.length)
+    for (const n of hosts.values()) stats.hostMoved += n
+    if (host) stats.showsWithHost++
+
+    // The host belongs in the haystack too — "Коган" should find his episodes
+    // even though his name is no longer in their titles.
+    for (const ep of episodes) {
+      if (ep.t || ep.a) search.push(ep.a ? [slug, ep.id, ep.t, ep.a] : [slug, ep.id, ep.t])
     }
 
     // Newest first by default: date, then season/episode, then original order.
@@ -323,7 +417,7 @@ function build() {
 
     writeFileSync(
       join(OUT, 'shows', `${slug}.json`),
-      JSON.stringify({ slug, name: displayName, secs: showSeconds || undefined, episodes }),
+      JSON.stringify({ slug, name: displayName, host: host || undefined, secs: showSeconds || undefined, episodes }),
     )
 
     grandSeconds += showSeconds
@@ -331,6 +425,7 @@ function build() {
     index.push({
       slug,
       name: displayName,
+      host: host || undefined,
       n: episodes.length,
       secs: showSeconds || undefined,
       y0: firstYear,
@@ -392,6 +487,8 @@ function report(index, stats, grandSeconds) {
   console.log(`  with season/ep   ${stats.withSeasonEp} (${pct(stats.withSeasonEp)})`)
   console.log(`  prefix stripped  ${stats.prefixStripped} (${pct(stats.prefixStripped)})`)
   console.log(`  with duration    ${stats.withLen} (${pct(stats.withLen)})`)
+  console.log(`  host pulled out  ${stats.hostMoved} (${pct(stats.hostMoved)})`)
+  console.log(`shows with a host  ${stats.showsWithHost}`)
   console.log(`eras               ${JSON.stringify(byEra)}`)
   console.log(`total runtime      ${Math.floor(grandSeconds / 3600)} h`)
   console.log(`index.json         ${kb(statSync(join(OUT, 'index.json')).size)}`)

@@ -86,6 +86,7 @@ function ShowRow({ show }) {
       <span class="grow">
         <Link class="name" href={`/show/${show.slug}`}>
           {show.name}
+          {show.host && <span class="host"> {show.host}</span>}
         </Link>
       </span>
       <span class="stats">

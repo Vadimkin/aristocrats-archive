@@ -19,6 +19,9 @@ export function EpisodeRow({ ep, show, onPlay }) {
   const partial = !done && saved?.pos > 0 && total ? saved.pos / total : 0
   const se = seasonEpisode(ep)
   const date = shortDate(ep.d)
+  // The host phrase lives on the show heading already; repeat it on the row
+  // only when this episode names someone else ("Ранкове Шоу" changed hosts).
+  const host = ep.a && ep.a !== show.host ? ep.a : ''
   // Only reserve the left gutter for episodes that actually carry a number —
   // an unnumbered track in a numbered show should start at the margin.
   const numbered = se !== ''
@@ -35,14 +38,17 @@ export function EpisodeRow({ ep, show, onPlay }) {
       tabIndex={0}
       onClick={activate}
       onKeyDown={(e) => (e.key === 'Enter' || e.key === ' ') && activate(e)}
-      aria-label={`${ep.t || se || 'Епізод'}${done ? ', прослухано' : ''}`}
+      aria-label={`${ep.t || host || se || 'Епізод'}${done ? ', прослухано' : ''}`}
     >
       {numbered && <span class="se">{isCurrent && playing.value ? '▶' : se}</span>}
 
       <span class="body">
-        <span class="title">{ep.t || <span class="dim">Без назви</span>}</span>
-        {(date || (isCurrent && !se)) && (
+        <span class="title">
+          {ep.t || (host && <span class="dim">{host}</span>) || <span class="dim">Без назви</span>}
+        </span>
+        {(date || (ep.t && host) || (isCurrent && !se)) && (
           <span class="sub">
+            {ep.t && host && <span>{host}</span>}
             {date && <span>{date}</span>}
           </span>
         )}

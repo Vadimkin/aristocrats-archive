@@ -5,17 +5,18 @@ import { store } from '../state/storage.js'
 import { doneByShow } from '../state/listening.js'
 import { play, toItem } from '../state/player.js'
 import { Highlight } from '../lib/highlight.jsx'
-import { yearSpan, episodeWord, showWord } from '../lib/format.js'
+import { yearSpan, episodeWord, showWord, fullShowName } from '../lib/format.js'
 
 const LIMIT = 60
 
 // Titles are stored in their display case; fold once per load rather than on
-// every keystroke.
+// every keystroke. The host phrase is folded in too — it left the title at
+// build time, but "Коган" should still find his episodes.
 const foldCache = new WeakMap()
 function foldedFor(index) {
   let folded = foldCache.get(index)
   if (!folded) {
-    folded = index.map(([, , title]) => title.toLowerCase())
+    folded = index.map(([, , title, host]) => (host ? `${title} ${host}` : title).toLowerCase())
     foldCache.set(index, folded)
   }
   return folded
@@ -31,20 +32,22 @@ export function SearchResults({ query, shows }) {
     loadSearchIndex().then(setIndex, () => setFailed(true))
   }, [])
 
-  const showHits = shows.filter((s) => s.name.toLowerCase().includes(query))
+  const showHits = shows.filter((s) =>
+    (s.host ? `${s.name} ${s.host}` : s.name).toLowerCase().includes(query),
+  )
 
   const episodeHits = []
   if (index) {
     const folded = foldedFor(index)
     for (let i = 0; i < index.length && episodeHits.length < LIMIT; i++) {
       if (folded[i].includes(query)) {
-        const [slug, id, title] = index[i]
-        episodeHits.push({ slug, id, title })
+        const [slug, id, title, host] = index[i]
+        episodeHits.push({ slug, id, title, host })
       }
     }
   }
 
-  const names = Object.fromEntries(shows.map((s) => [s.slug, s.name]))
+  const bySlug = Object.fromEntries(shows.map((s) => [s.slug, s]))
   const nothing = !showHits.length && index && !episodeHits.length
 
   return (
@@ -76,7 +79,7 @@ export function SearchResults({ query, shows }) {
         {!index && !failed && <p class="loading">Пошук…</p>}
         {index && !episodeHits.length && <p class="empty">Епізодів не знайдено.</p>}
         {episodeHits.map((hit) => (
-          <EpisodeHit key={hit.id} hit={hit} showName={names[hit.slug]} query={query} />
+          <EpisodeHit key={hit.id} hit={hit} show={bySlug[hit.slug]} query={query} />
         ))}
       </section>
 
@@ -94,6 +97,9 @@ function ShowHit({ show, query }) {
       <span class="grow">
         <Link class="name" href={`/show/${show.slug}`}>
           <Highlight text={show.name} query={query} />
+          {show.host && (
+            <span class="host"> <Highlight text={show.host} query={query} /></span>
+          )}
         </Link>
       </span>
       <span class="stats">
@@ -105,23 +111,26 @@ function ShowHit({ show, query }) {
   )
 }
 
-function EpisodeHit({ hit, showName, query }) {
+function EpisodeHit({ hit, show, query }) {
   const done = Boolean(store.value.episodes[hit.id]?.done)
+  const showName = show ? fullShowName(show, { a: hit.host }) : ''
 
   // The search index carries no path, so pull the episode from its show JSON.
   const start = async () => {
-    const show = await loadShow(hit.slug)
-    const ep = show.episodes.find((e) => e.id === hit.id)
-    if (ep) play(toItem(ep, show))
+    const full = await loadShow(hit.slug)
+    const ep = full.episodes.find((e) => e.id === hit.id)
+    if (ep) play(toItem(ep, full))
   }
 
   return (
     <div class={`row${done ? ' is-done' : ''}`}>
       <button class="grow" style={{ textAlign: 'left' }} onClick={start}>
         <span class="title" style={{ color: done ? 'var(--dim)' : 'var(--link)' }}>
-          <Highlight text={hit.title} query={query} />
+          {hit.title ? <Highlight text={hit.title} query={query} /> : <span class="dim">Без назви</span>}
         </span>
-        <div class="dim" style={{ fontSize: '12.5px' }}>{showName}</div>
+        <div class="dim" style={{ fontSize: '12.5px' }}>
+          <Highlight text={showName} query={query} />
+        </div>
       </button>
       <Link class="meta" href={`/show/${hit.slug}`} aria-label={`Перейти до ${showName}`}>
         →

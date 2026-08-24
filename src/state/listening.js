@@ -1,6 +1,7 @@
 import { computed } from '@preact/signals'
 import { store, mutate, episodeEntry, showEntry } from './storage.js'
 import { MIN_RESUME_SECONDS } from '../config.js'
+import { fullShowName } from '../lib/format.js'
 
 export const epState = (id) => store.value.episodes[id] ?? null
 
@@ -79,7 +80,7 @@ export function clearShow(episodes) {
 }
 
 /** Minimal snapshot so "Продовжити" can render without loading show JSON. */
-export const metaFor = (ep, show) => ({ t: ep.t, s: show.slug, n: show.name, p: ep.p })
+export const metaFor = (ep, show) => ({ t: ep.t, s: show.slug, n: fullShowName(show, ep), p: ep.p })
 
 export function countDone(episodes) {
   const { episodes: saved } = store.value

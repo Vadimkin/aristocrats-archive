@@ -2,6 +2,7 @@ import { signal } from '@preact/signals'
 import { audioUrl, DONE_RATIO, DONE_TAIL_SECONDS, MIN_RESUME_SECONDS } from '../config.js'
 import { store, mutate, mutateQuietly, episodeEntry, showEntry } from './storage.js'
 import { resumePos } from './listening.js'
+import { fullShowName } from '../lib/format.js'
 
 export const current = signal(null) // { id, t, p, slug, showName }
 export const playing = signal(false)
@@ -19,7 +20,7 @@ export const toItem = (ep, show) => ({
   t: ep.t,
   p: ep.p,
   slug: show.slug,
-  showName: show.name,
+  showName: fullShowName(show, ep),
 })
 
 // ------------------------------------------------------------------ element

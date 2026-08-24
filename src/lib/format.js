@@ -55,6 +55,17 @@ export function yearSpan(y0, y1) {
   return `${y0}–${y1}`
 }
 
+/**
+ * The show name as the archive writes it, host and all:
+ * "Второе свидание" + "с Ярославом Лодыгиным" -> the full thing.
+ * An episode's own host phrase (`a`) wins over the show's, so a Russian-titled
+ * Jazz Time episode says "с Алексеем Коганом" and a Ukrainian one does not.
+ */
+export function fullShowName(show, ep) {
+  const host = ep?.a ?? show?.host
+  return host ? `${show.name} ${host}` : show?.name ?? ''
+}
+
 // "s3e12", or just "s3" / "e12" when only one was parseable.
 export function seasonEpisode(ep) {
   if (ep.s != null && ep.e != null) return `s${ep.s}e${ep.e}`
