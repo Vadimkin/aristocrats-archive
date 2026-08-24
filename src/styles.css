@@ -1,0 +1,519 @@
+:root {
+  --bg: #fff;
+  --fg: #000;
+  --dim: #8a8a8e;
+  --dimmer: #b8b8bd;
+  --link: #0058e0;
+  --line: #e3e3e6;
+  --hover: #f2f2f5;
+  --accent: #0058e0;
+  --done: #34a04a;
+  --warn: #c0392b;
+  --panel: #fbfbfd;
+  --row: 44px;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #131316;
+    --fg: #ececef;
+    --dim: #85858c;
+    --dimmer: #5c5c63;
+    --link: #5c9dff;
+    --line: #2a2a30;
+    --hover: #1d1d22;
+    --accent: #5c9dff;
+    --done: #4cc266;
+    --warn: #ff6b5e;
+    --panel: #1a1a1f;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; }
+
+body {
+  margin: 0;
+  padding: 0 0 calc(var(--player-h, 56px) + env(safe-area-inset-bottom) + 24px);
+  background: var(--bg);
+  color: var(--fg);
+  font: 16px/1.45 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  font-feature-settings: 'tnum' 1;
+  overscroll-behavior-y: none;
+}
+
+/* One measure keeps the masthead, the search bar and the content aligned —
+   and the same on every route, so the column does not jump between pages. */
+.page { --measure: 44rem; }
+.wrap { max-width: var(--measure); margin: 0 auto; padding: 0 16px; }
+
+a { color: var(--link); text-decoration: none; }
+a:hover { text-decoration: underline; }
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+h1 { font-size: 28px; line-height: 1.15; margin: 20px 0 4px; letter-spacing: -0.02em; }
+h2 { font-size: 15px; margin: 28px 0 6px; letter-spacing: 0.01em; }
+
+.dim { color: var(--dim); }
+.tnum { font-variant-numeric: tabular-nums; }
+.mono-n { font-variant-numeric: tabular-nums; }
+
+/* ------------------------------------------------------------- masthead */
+
+.masthead {
+  position: relative;
+  isolation: isolate;
+  /* Centre the block, so whatever slack min-height leaves is split evenly
+     above and below rather than all falling underneath. */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  background-color: var(--bg);
+  padding-top: env(safe-area-inset-top);
+  /* The photo runs the full width, so `cover` scales it with the viewport and
+     the cat renders at roughly 0.13 × viewport width — 254px tall at 1920. A
+     band that always contained it whole would therefore have to be enormous on
+     desktop, so this keeps the band compact and lets the desk edge run off the
+     bottom; `background-position` below keeps the head and body in frame. */
+  min-height: clamp(194px, 12vw, 270px);
+}
+
+/* The photo lives on its own layer so the type above it is unaffected by the
+   scrim. --studio is set inline so the path survives a sub-path deploy. */
+.masthead::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  /* Scrim is heaviest at the top, where the wordmark and gear sit, and thins
+     out toward the bottom so the cat on the desk keeps its colour. */
+  --scrim: linear-gradient(
+    to bottom,
+    rgba(8, 12, 11, 0.82) 0%,
+    rgba(8, 12, 11, 0.52) 48%,
+    rgba(8, 12, 11, 0.16) 100%
+  );
+  background-image: var(--scrim), var(--studio);
+  background-size: cover;
+  /* Focal point: the cat sits low and right in the illustration. */
+  /* 78% is the highest the focal point can sit while the cat's head still
+     clears the top edge at 2560px, the worst case. */
+  background-position: 62% 78%;
+}
+
+.masthead-inner {
+  position: relative;
+  max-width: var(--measure);
+  margin: 0 auto;
+  width: 100%;
+  padding: 22px 56px;
+  text-align: center;
+}
+
+.brand {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 13px;
+  line-height: 1;
+  color: #fff;
+}
+.brand:hover { text-decoration: none; }
+
+.tagline {
+  /* One sentence should not run the width of a 3-column measure. */
+  max-width: 34rem;
+  margin: 9px auto 0;
+  font-size: clamp(13.5px, 1.15vw, 15.5px);
+  line-height: 1.4;
+  color: rgba(255, 255, 255, 0.82);
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.6);
+}
+
+.wordmark {
+  font-size: clamp(23px, 2.6vw, 36px);
+  font-weight: 700;
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.55);
+}
+
+.brand img {
+  display: block;
+  height: clamp(64px, 6vw, 96px);
+  width: auto;
+  /* The mark is a mask filled with an embedded raster, so there is no fill to
+     override — flatten it to black, then invert to white. Shadow last, so it
+     is cast by the white shape. */
+  filter: brightness(0) invert(1) drop-shadow(0 1px 4px rgba(0, 0, 0, 0.5));
+}
+
+.masthead .gear {
+  position: absolute;
+  top: 14px;
+  right: 12px;
+  color: #fff;
+}
+.masthead .gear:hover { background: rgba(255, 255, 255, 0.16); }
+
+/* Sticky so it stays reachable down a 148-row list. */
+.searchbar {
+  position: sticky;
+  top: 0;
+  z-index: 20;
+  background: var(--bg);
+  border-bottom: 1px solid var(--line);
+}
+.searchbar-inner {
+  max-width: var(--measure);
+  margin: 0 auto;
+  padding: 9px 16px;
+}
+
+.search {
+  display: block;
+  width: 100%;
+  /* 16px keeps iOS from zooming the page when the field takes focus. */
+  font: 16px/1.3 inherit;
+  color: inherit;
+  background: var(--hover);
+  border: 0;
+  border-radius: 10px;
+  padding: 10px 13px;
+  outline-offset: 2px;
+}
+.search::placeholder { color: var(--dim); }
+
+.backrow { padding: 12px 0 0; font-size: 14.5px; }
+
+mark {
+  background: rgba(255, 208, 0, 0.42);
+  color: inherit;
+  border-radius: 2px;
+  padding: 0 1px;
+}
+
+/* ------------------------------------------------------------- rows */
+
+.section-head {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin: 26px 0 2px;
+  padding-bottom: 4px;
+  border-bottom: 1px solid var(--line);
+}
+.section-head h2 { margin: 0; flex: 1; font-weight: 700; }
+.section-head .count { font-size: 13px; color: var(--dim); }
+.section-note { font-size: 13px; color: var(--dim); margin: 4px 0 0; }
+
+.row {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  padding: 7px 0;
+  border-bottom: 1px solid var(--line);
+  min-height: 34px;
+}
+.row:last-child { border-bottom: 0; }
+.row .grow { flex: 1; min-width: 0; }
+.row .meta { flex: none; font-size: 13px; color: var(--dim); font-variant-numeric: tabular-nums; }
+
+.row.is-done .title { color: var(--dim); }
+.row.is-current .title { font-weight: 600; }
+
+.title { overflow-wrap: anywhere; }
+
+/* Alphabetical lists read better flowing down each column than across rows,
+   so this is multicol rather than grid. */
+.show-list { column-gap: 44px; }
+.show-list .row { break-inside: avoid; }
+
+/* show list rows */
+.show-row .name { font-size: 16px; }
+.show-row .stats { font-size: 13px; color: var(--dim); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.show-row.is-done .name { color: var(--dim); }
+
+/* episode rows */
+.ep {
+  display: grid;
+  /* Fixed first column so numbers, titles and marks line up down the list —
+     each row is its own grid, so an `auto` column would ragged-edge. */
+  grid-template-columns: 52px 1fr auto auto;
+  align-items: baseline;
+  gap: 4px 8px;
+  padding: 8px 0 7px;
+  border-bottom: 1px solid var(--line);
+  width: 100%;
+  text-align: left;
+}
+.ep:hover { background: var(--hover); box-shadow: 0 0 0 8px var(--hover); }
+.ep.no-se { grid-template-columns: 1fr auto auto; }
+.ep.no-se .hair { grid-column: 1 / -1; }
+.ep .se {
+  font-size: 12px;
+  color: var(--dimmer);
+  font-variant-numeric: tabular-nums;
+  white-space: nowrap;
+}
+.ep .body { min-width: 0; }
+.ep .title { color: var(--link); }
+.ep .sub {
+  font-size: 12.5px;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+.ep .len { font-size: 13px; color: var(--dim); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.ep.is-done .title { color: var(--dim); }
+.ep.is-current .title { font-weight: 600; color: var(--fg); }
+.ep.is-current { background: var(--hover); box-shadow: 0 0 0 8px var(--hover); }
+
+.gear {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 32px;
+  height: 32px;
+  margin-right: -6px;
+  color: var(--link);
+  border-radius: 50%;
+}
+.gear:hover { background: var(--hover); }
+
+.dismiss {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+  line-height: 1;
+  color: var(--dimmer);
+  border-radius: 50%;
+}
+.dismiss:hover { background: var(--line); color: var(--fg); }
+
+.mark {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  margin: -6px -6px -6px 0;
+  display: grid;
+  place-items: center;
+  font-size: 14px;
+  color: var(--dimmer);
+  border-radius: 50%;
+}
+.mark.on { color: var(--done); }
+.mark:hover { background: var(--line); }
+
+/* thin per-episode resume bar, spans the text columns */
+.hair {
+  grid-column: 2 / -1;
+  height: 2px;
+  background: var(--line);
+  border-radius: 1px;
+  overflow: hidden;
+}
+.hair > i { display: block; height: 100%; background: var(--accent); }
+
+/* ------------------------------------------------------------- show header */
+
+.show-head { padding: 14px 0 0; }
+.show-head .sub { font-size: 13.5px; color: var(--dim); margin-top: 2px; }
+.progress {
+  height: 2px;
+  background: var(--line);
+  border-radius: 1px;
+  margin: 10px 0;
+  overflow: hidden;
+}
+.progress > i { display: block; height: 100%; background: var(--done); }
+
+.actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 8px 0 10px;
+  font-size: 14.5px;
+  border-bottom: 1px solid var(--line);
+}
+.actions button { color: var(--link); }
+.actions button.danger { color: var(--warn); }
+.actions button:disabled { color: var(--dimmer); cursor: default; }
+
+.filters {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px 14px;
+  padding: 8px 0;
+  font-size: 13.5px;
+  color: var(--dim);
+  border-bottom: 1px solid var(--line);
+}
+.filters button { color: var(--link); }
+.filters button[aria-pressed='true'],
+.filters button.on { color: var(--fg); font-weight: 600; }
+
+/* ------------------------------------------------------------- player */
+
+.player {
+  position: fixed;
+  left: 0; right: 0; bottom: 0;
+  z-index: 40;
+  background: var(--bg);
+  border-top: 1px solid var(--line);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -1px 12px rgba(0, 0, 0, 0.05);
+}
+@media (prefers-color-scheme: dark) {
+  .player { box-shadow: 0 -1px 12px rgba(0, 0, 0, 0.4); }
+}
+
+.player .chev {
+  flex: none;
+  font-size: 13px;
+  color: var(--link);
+  padding: 6px 2px;
+}
+
+.player .line { height: 2px; background: var(--line); }
+.player .line > i { display: block; height: 100%; background: var(--accent); }
+
+.bar {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  min-height: 54px;
+}
+.bar .info { flex: 1; min-width: 0; text-align: left; }
+.bar .t {
+  font-size: 14.5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.bar .s { font-size: 12.5px; color: var(--dim); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+.pp {
+  flex: none;
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-size: 17px;
+  background: var(--hover);
+}
+.pp:hover { background: var(--line); }
+
+.sheet {
+  padding: 4px 16px 16px;
+  border-top: 1px solid var(--line);
+  max-height: 78vh;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.scrub { padding: 10px 0 2px; }
+.scrub input[type='range'] { width: 100%; margin: 0; accent-color: var(--accent); }
+.times {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.transport {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  padding: 8px 0 12px;
+}
+.transport button { font-size: 15px; color: var(--link); }
+.transport button:disabled { color: var(--dimmer); }
+.transport .pp { font-size: 20px; width: 52px; height: 52px; }
+
+.sheet-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+  padding: 8px 0;
+  border-top: 1px solid var(--line);
+  font-size: 13.5px;
+}
+.sheet-row .label { color: var(--dim); flex: none; }
+.sheet-row button { color: var(--link); }
+.sheet-row button.on { color: var(--fg); font-weight: 700; }
+
+.err {
+  padding: 6px 16px 8px;
+  font-size: 13px;
+  color: var(--warn);
+}
+
+/* ------------------------------------------------------------- misc */
+
+.footer {
+  margin-top: 36px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+  font-size: 12.5px;
+  color: var(--dim);
+  font-variant-numeric: tabular-nums;
+}
+
+.empty { color: var(--dim); padding: 24px 0; font-size: 14.5px; }
+.loading { color: var(--dim); padding: 24px 0; font-size: 14.5px; }
+
+.settings label { display: block; margin: 14px 0 4px; font-size: 13px; color: var(--dim); }
+.settings .note { font-size: 13px; color: var(--dim); margin: 6px 0 0; }
+.settings .ok { color: var(--done); }
+.settings .bad { color: var(--warn); }
+.file { font-size: 14px; }
+
+@media (prefers-color-scheme: dark) {
+  mark { background: rgba(255, 208, 0, 0.26); }
+}
+
+/* Keep the right of the masthead clear so the cat is not behind the field —
+   and a search box spanning the whole column looks stretched anyway. */
+/* Wide viewports crop far more of the image height, so the band has to grow
+   for the whole cat to stay in frame. Above the 1200px cap it stops growing,
+   because the photo stops scaling. */
+/* The 1200w file is ample up to here; beyond it the full-bleed photo is being
+   scaled past its pixels, which is what shows as softness on big screens. */
+@media (min-width: 800px) {
+  .masthead::before { background-image: var(--scrim), var(--studio-lg); }
+}
+
+@media (min-width: 700px) {
+  .page { --measure: 58rem; }
+  .show-list { columns: 2; }
+}
+
+@media (min-width: 1080px) {
+  .page { --measure: 72rem; }
+  .show-list { columns: 3; }
+}
+
+@media (min-width: 620px) {
+  .ep { grid-template-columns: 62px 1fr auto auto; }
+}
