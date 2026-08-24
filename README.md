@@ -158,4 +158,7 @@ show and back. The field is 16px so iOS does not zoom the page on focus.
 - Keyboard: `space`/`k` play-pause, `←`/`→` seek, `/` focus search.
 - Initial payload is ~25 KB gzipped.
 - Settings live behind the gear in the header (`#/settings`).
-- Deploy `dist/` to any static host.
+- Deploy `dist/` to any static host. The build is pinned to the `/aristocrats/` sub-path
+  (`base` in `vite.config.js`), which is where dev is served from; every asset and data URL is
+  built from `import.meta.env.BASE_URL`, so nothing else needs touching. For a root deploy:
+  `BASE_PATH=/ npm run build`.
