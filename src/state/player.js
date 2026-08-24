@@ -3,6 +3,7 @@ import { audioUrl, DONE_RATIO, DONE_TAIL_SECONDS, MIN_RESUME_SECONDS } from '../
 import { store, mutate, mutateQuietly, episodeEntry, showEntry } from './storage.js'
 import { resumePos } from './listening.js'
 import { fullShowName } from '../lib/format.js'
+import { track } from '../lib/analytics.js'
 
 export const current = signal(null) // { id, t, p, slug, showName }
 export const playing = signal(false)
@@ -167,6 +168,11 @@ export function play(item, opts = {}) {
     e.m ??= { t: item.t, s: item.slug, n: item.showName, p: item.p }
     showEntry(db, item.slug).lastPlayedId = item.id
   })
+
+  // Only starting an episode counts. toggle() deliberately does not report, so
+  // one listen is one event however often it gets paused and resumed. The
+  // fallback matches the row's own placeholder for an episode with no title.
+  track('Play Podcast', { podcast: item.t || 'Без назви', show: item.showName })
 
   updateMediaSession(item)
 }
