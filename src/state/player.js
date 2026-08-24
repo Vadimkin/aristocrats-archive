@@ -223,13 +223,26 @@ export function setVolume(value) {
 
 // ------------------------------------------------------------------ media session
 
+// Built per call rather than once at module scope: the OS resolves these
+// itself, with no document to resolve a relative path against, so they have to
+// be absolute — and a sub-path deploy means they are not at the origin root.
+const artwork = () =>
+  [96, 192, 512].map((size) => ({
+    src: new URL(`${import.meta.env.BASE_URL}cover-${size}.jpg`, location.href).href,
+    sizes: `${size}x${size}`,
+    type: 'image/jpeg',
+  }))
+
 function updateMediaSession(item) {
   const ms = navigator.mediaSession
   if (!ms) return
   ms.metadata = new MediaMetadata({
-    title: item.t,
+    // Same placeholder the rows use: an episode whose title was pure
+    // season/episode noise has none, and a blank lock screen looks broken.
+    title: item.t || 'Без назви',
     artist: item.showName,
     album: 'Aristocrats FM',
+    artwork: artwork(),
   })
   ms.setActionHandler('play', () => toggle())
   ms.setActionHandler('pause', () => toggle())
