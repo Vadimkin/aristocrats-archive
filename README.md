@@ -134,6 +134,33 @@ a sub-path deploy in a way a bare `url()` in the stylesheet would not; the style
 Source images live in `assets/`, not `public/` — Vite copies everything under `public/` into
 `dist/`, and the two originals are 4.8 MB.
 
+## Home screen
+
+The site installs as a standalone app — «На екран «Домівка»» in iOS Safari, the install prompt in
+Chrome. `public/manifest.webmanifest` supplies the name, `display: standalone`, and the icons; its
+paths are all relative (`./`, `icon-192.png`), so they resolve against the manifest's own URL and
+survive the sub-path deploy without anything reading `BASE_URL`.
+
+Icons come from `assets/cat-with-light-logo.jpg` (1041²) via `sh scripts/build-icons.sh`, in two
+crops, because one framing cannot cover the whole size range:
+
+| File | Used | Crop |
+|---|---|---|
+| `public/apple-touch-icon.png` | iOS home screen, 180² | full artwork |
+| `public/icon-192.png`, `icon-512.png` | manifest, install prompt, Android splash | full artwork |
+| `public/favicon-16.png`, `favicon-32.png` | browser tab | centre 600², the «A» mark |
+
+At 180px up, the room and the cat still read and they are what makes the icon recognisable. At
+16px the full scene is a smudge, so the favicon crops to the mark — which sits centred in the
+artwork, so a plain centre crop lands on it. The 512 is also declared `purpose: maskable`: the
+mark sits well inside the 80% safe circle, so Android can round or crop the frame without touching
+it.
+
+iOS ignores the manifest's `theme_color`, taking `apple-mobile-web-app-status-bar-style` instead.
+That is set to `black-translucent`, so the page runs under the status bar — which is what the
+masthead's `padding-top: env(safe-area-inset-top)` already allows for, and every route renders that
+dark band, so the white status-bar text has contrast everywhere.
+
 ## Layout
 
 `--measure` on a `.page` wrapper drives the masthead, the search bar and the content together, so

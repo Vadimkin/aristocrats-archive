@@ -7,6 +7,24 @@
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#131316" media="(prefers-color-scheme: dark)" />
     <meta name="description" content="Архів шоу та подкастів Aristocrats FM" />
+
+    <!-- Icons and manifest are copied verbatim out of public/, so these paths
+         start at the site root and Vite rewrites them onto `base` at build
+         time — the same treatment the module script below gets. -->
+    <link rel="icon" href="/favicon-32.png" sizes="32x32" type="image/png" />
+    <link rel="icon" href="/favicon-16.png" sizes="16x16" type="image/png" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="manifest" href="/manifest.webmanifest" />
+
+    <!-- Home-screen launch. `black-translucent` lets the page run under the
+         status bar, which is what the masthead's safe-area padding already
+         expects; every route renders that dark photo band at the top, so the
+         white status bar text has contrast on all of them. -->
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Аристократи" />
+
     <title>Аристократи — архів подкастів</title>
   </head>
   <body>
