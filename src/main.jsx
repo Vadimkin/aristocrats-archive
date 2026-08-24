@@ -7,6 +7,7 @@ import { Show } from './routes/Show.jsx'
 import { Settings } from './routes/Settings.jsx'
 import { Player } from './components/Player.jsx'
 import { restore, toggle, skip, current } from './state/player.js'
+import { useTitle } from './lib/title.js'
 import './styles.css'
 
 restore()
@@ -20,15 +21,21 @@ function App() {
         <Route path="/" component={Shows} />
         <Route path="/show/:slug">{(params) => <Show slug={params.slug} />}</Route>
         <Route path="/settings" component={Settings} />
-        <Route>
-          <div class="wrap">
-            <h1>Не знайдено</h1>
-            <p><Link href="/">До списку шоу</Link></p>
-          </div>
-        </Route>
+        <Route component={NotFound} />
       </Switch>
       <Player />
     </Router>
+  )
+}
+
+// A component rather than inline JSX in the Route, so that it can own the title.
+function NotFound() {
+  useTitle('Не знайдено')
+  return (
+    <div class="wrap">
+      <h1>Не знайдено</h1>
+      <p><Link href="/">До списку шоу</Link></p>
+    </div>
   )
 }
 

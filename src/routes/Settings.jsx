@@ -2,10 +2,13 @@ import { useState } from 'preact/hooks'
 import { Link } from 'wouter-preact'
 import { exportBlob, exportFilename, importMerge, resetAll } from '../state/storage.js'
 import { Header } from '../components/Header.jsx'
+import { useTitle } from '../lib/title.js'
 
 export function Settings() {
   const [msg, setMsg] = useState(null)
   const [err, setErr] = useState(null)
+
+  useTitle('Налаштування')
 
   function download() {
     const url = URL.createObjectURL(exportBlob())

@@ -7,10 +7,13 @@ import { query } from '../state/search.js'
 import { Header } from '../components/Header.jsx'
 import { SearchResults } from '../components/Search.jsx'
 import { yearSpan, episodeWord, showWord, grouped, hours, duration as fmtDuration } from '../lib/format.js'
+import { useTitle } from '../lib/title.js'
 
 export function Shows() {
   const [data, setData] = useState(null)
   const [failed, setFailed] = useState(false)
+
+  useTitle(null)
 
   useEffect(() => {
     loadIndex().then(setData, () => setFailed(true))

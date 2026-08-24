@@ -6,7 +6,8 @@ import { countDone, isFav, toggleFav, setManyDone, clearShow } from '../state/li
 import { toItem, play } from '../state/player.js'
 import { Header } from '../components/Header.jsx'
 import { EpisodeRow } from '../components/EpisodeRow.jsx'
-import { episodeWord, yearSpan, runtime } from '../lib/format.js'
+import { episodeWord, yearSpan, runtime, fullShowName } from '../lib/format.js'
+import { useTitle } from '../lib/title.js'
 
 export function Show({ slug }) {
   const [show, setShow] = useState(null)
@@ -19,6 +20,10 @@ export function Show({ slug }) {
     scrollTo(0, 0)
     loadShow(slug).then(setShow, () => setFailed(true))
   }, [slug])
+
+  // The name only exists once the show JSON lands, so the tab holds the site
+  // title for the moment in between rather than the previous show's name.
+  useTitle(show ? fullShowName(show) : failed ? 'Шоу не знайдено' : null)
 
   if (failed || !show) {
     return (
