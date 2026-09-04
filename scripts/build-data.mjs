@@ -404,9 +404,15 @@ function build() {
     if (host) stats.showsWithHost++
 
     // The host belongs in the haystack too — "Коган" should find his episodes
-    // even though his name is no longer in their titles.
+    // even though his name is no longer in their titles. The date is not
+    // searched; it rides along so results can tell apart the many episodes
+    // that share a title ("Музыкальный баттл" runs weekly for years).
+    // Positional rows: [slug, id, title, host, date], trailing blanks dropped.
     for (const ep of episodes) {
-      if (ep.t || ep.a) search.push(ep.a ? [slug, ep.id, ep.t, ep.a] : [slug, ep.id, ep.t])
+      if (!ep.t && !ep.a) continue
+      const row = [slug, ep.id, ep.t, ep.a ?? '', ep.d ?? '']
+      while (row.length > 3 && !row[row.length - 1]) row.pop()
+      search.push(row)
     }
 
     // Newest first by default: date, then season/episode, then original order.

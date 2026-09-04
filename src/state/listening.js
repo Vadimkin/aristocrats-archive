@@ -80,7 +80,13 @@ export function clearShow(episodes) {
 }
 
 /** Minimal snapshot so "Продовжити" can render without loading show JSON. */
-export const metaFor = (ep, show) => ({ t: ep.t, s: show.slug, n: fullShowName(show, ep), p: ep.p })
+export const metaFor = (ep, show) => ({
+  t: ep.t,
+  s: show.slug,
+  n: fullShowName(show, ep),
+  p: ep.p,
+  d: ep.d,
+})
 
 export function countDone(episodes) {
   const { episodes: saved } = store.value
@@ -117,6 +123,7 @@ export const inProgress = computed(() =>
       id,
       t: e.m.t,
       p: e.m.p,
+      d: e.m.d,
       slug: e.m.s,
       showName: e.m.n,
       pos: e.pos,
