@@ -4,7 +4,7 @@ import {
   current, playing, stalled, time, duration, buffered, expanded, error,
   toggle, seek,
 } from '../state/player.js'
-import { duration as fmtDuration } from '../lib/format.js'
+import { duration as fmtDuration, shortDate } from '../lib/format.js'
 
 export function Player() {
   const el = useRef(null)
@@ -45,7 +45,10 @@ export function Player() {
           aria-expanded={expanded.value}
         >
           <div class="t">{item.t}</div>
-          <div class="s">{item.showName}</div>
+          <div class="s">
+            <span>{item.showName}</span>
+            {item.d && <span class="d">· {shortDate(item.d)}</span>}
+          </div>
         </button>
 
         <button

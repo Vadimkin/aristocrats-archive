@@ -5,7 +5,7 @@ import { resumePos } from './listening.js'
 import { fullShowName } from '../lib/format.js'
 import { track } from '../lib/analytics.js'
 
-export const current = signal(null) // { id, t, p, slug, showName }
+export const current = signal(null) // { id, t, p, slug, showName, d }
 export const playing = signal(false)
 export const stalled = signal(false)
 export const time = signal(0)
@@ -20,9 +20,19 @@ export const toItem = (ep, show) => ({
   id: ep.id,
   t: ep.t,
   p: ep.p,
+  d: ep.d,
   slug: show.slug,
   showName: fullShowName(show, ep),
 })
+
+/**
+ * Attach the snapshot "Продовжити" and the restored player render from, or
+ * top up one written before rows carried a date.
+ */
+function snapshot(e, item) {
+  e.m ??= { t: item.t, s: item.slug, n: item.showName, p: item.p, d: item.d }
+  if (item.d && !e.m.d) e.m.d = item.d
+}
 
 // ------------------------------------------------------------------ element
 
@@ -48,7 +58,7 @@ function persistPosition(force = false) {
     const e = episodeEntry(db, item.id)
     if (dur) e.dur = dur
     e.playedAt = now
-    e.m ??= { t: item.t, s: item.slug, n: item.showName, p: item.p }
+    snapshot(e, item)
     // Below the threshold this is an accidental tap, not a resume point.
     if (!e.done && pos >= MIN_RESUME_SECONDS) e.pos = pos
     else if (!e.done) delete e.pos
@@ -67,7 +77,7 @@ function markDone(item) {
     e.done = true
     e.doneAt = Date.now()
     e.playedAt = Date.now()
-    e.m ??= { t: item.t, s: item.slug, n: item.showName, p: item.p }
+    snapshot(e, item)
     if (Number.isFinite(audio.duration)) e.dur = audio.duration
     delete e.pos
   })
@@ -165,7 +175,7 @@ export function play(item, opts = {}) {
   mutate((db) => {
     const e = episodeEntry(db, item.id)
     e.playedAt = Date.now()
-    e.m ??= { t: item.t, s: item.slug, n: item.showName, p: item.p }
+    snapshot(e, item)
     showEntry(db, item.slug).lastPlayedId = item.id
   })
 

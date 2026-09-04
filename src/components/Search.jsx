@@ -5,7 +5,7 @@ import { store } from '../state/storage.js'
 import { doneByShow } from '../state/listening.js'
 import { play, toItem } from '../state/player.js'
 import { Highlight } from '../lib/highlight.jsx'
-import { yearSpan, episodeWord, showWord, fullShowName } from '../lib/format.js'
+import { yearSpan, episodeWord, showWord, fullShowName, shortDate } from '../lib/format.js'
 
 const LIMIT = 60
 
@@ -41,8 +41,8 @@ export function SearchResults({ query, shows }) {
     const folded = foldedFor(index)
     for (let i = 0; i < index.length && episodeHits.length < LIMIT; i++) {
       if (folded[i].includes(query)) {
-        const [slug, id, title, host] = index[i]
-        episodeHits.push({ slug, id, title, host })
+        const [slug, id, title, host, date] = index[i]
+        episodeHits.push({ slug, id, title, host, date })
       }
     }
   }
@@ -130,6 +130,7 @@ function EpisodeHit({ hit, show, query }) {
         </span>
         <div class="dim" style={{ fontSize: '12.5px' }}>
           <Highlight text={showName} query={query} />
+          {hit.date && ` · ${shortDate(hit.date)}`}
         </div>
       </button>
       <Link class="meta" href={`/show/${hit.slug}`} aria-label={`Перейти до ${showName}`}>

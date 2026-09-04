@@ -120,7 +120,14 @@ function ContinueSection() {
               class="grow"
               style={{ textAlign: 'left' }}
               onClick={() =>
-                play({ id: item.id, t: item.t, p: item.p, slug: item.slug, showName: item.showName })
+                play({
+                  id: item.id,
+                  t: item.t,
+                  p: item.p,
+                  d: item.d,
+                  slug: item.slug,
+                  showName: item.showName,
+                })
               }
             >
               <span class="title" style={{ color: 'var(--link)' }}>{item.t}</span>
