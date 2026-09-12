@@ -3,7 +3,7 @@ import { audioUrl, DONE_RATIO, DONE_TAIL_SECONDS, MIN_RESUME_SECONDS } from '../
 import { store, mutate, mutateQuietly, episodeEntry, showEntry } from './storage.js'
 import { resumePos } from './listening.js'
 import { fullShowName } from '../lib/format.js'
-import { track } from '../lib/analytics.js'
+import { track } from '../lib/track.js'
 
 export const current = signal(null) // { id, t, p, slug, showName, d }
 export const playing = signal(false)

@@ -13,22 +13,16 @@ npm run build    # -> dist/
 npm run preview
 ```
 
-`npm run data` alone regenerates only the data chunks.
+`npm run data` alone re-exports the data chunks from `db/aristocrats.db`. The committed
+database is all a build needs — see [Data pipeline](#data-pipeline).
 
 ### Episode durations
 
-`tracks.json` carries no durations, so `scripts/scan-durations.mjs` ffprobes the local archive
-once and writes `durations.json` (99 KB, committed). A normal build reads that file and never
-touches the disk; if it is absent the build still works, just without lengths or totals.
-
-```sh
-node scripts/scan-durations.mjs [archiveRoot]   # default /Volumes/Vadym
-```
-
-It resumes — already-known ids are skipped — and keys on the same path hash as the build
-(`scripts/lib/hash.mjs`), so the two always agree. 4,929 of 4,930 files resolve, totalling
-**7,392 h**. The holdout is a `.temp.m4a`, an interrupted yt-dlp download with no finalised `moov`
-atom; it is on R2 too, so it will not play in a browser either and shows no length.
+The archive listing carries no durations. Lengths already live on `episodes.duration` (4,929 of
+4,930 files, totalling **7,392 h**) and `db:import` never overwrites a non-NULL value, so a
+re-seed does not lose them. Missing lengths can still be filled from `scripts/data/durations.json`. The
+holdout is a `.temp.m4a`, an interrupted yt-dlp download with no finalised `moov` atom; it is
+on R2 too, so it will not play in a browser either and shows no length.
 
 ## Audio
 
@@ -42,7 +36,7 @@ Override with `VITE_AUDIO_BASE` at build time.
 
 Two constraints, both load-bearing:
 
-- **No bucket prefix.** r2.dev serves the bucket root, so the paths from `tracks.json`
+- **No bucket prefix.** r2.dev serves the bucket root, so the stored paths
   (`aristocrats/<show>/<file>.m4a`, already percent-encoded) append directly. Re-adding the
   `aristocratsfm/` segment from the S3 endpoint 404s, and re-encoding the path breaks it.
 - **No `crossorigin` on `<audio>`.** The bucket sends no `Access-Control-Allow-Origin`. A plain
@@ -51,28 +45,85 @@ Two constraints, both load-bearing:
 
 ## Data pipeline
 
-`scripts/build-data.mjs` turns the 3.5 MB `tracks.json` into chunks a phone can load lazily:
+The archive lives in **`db/aristocrats.db`** (SQLite, committed). It is the source of truth, and
+the build only reads it:
+
+```
+scripts/data/tracks.json     ──┐                                        ┌─ public/data/index.json
+                               ├─ db:import ─► db/aristocrats.db ─ data ─┼─ public/data/shows/<slug>.json
+scripts/data/durations.json  ──┘   (parses)      (source of truth)       └─ public/data/search.json
+```
+
+| Command | Does |
+|---|---|
+| `npm run db:import` | re-seeds the DB from `scripts/data/*.json`. Idempotent. |
+| `npm run data` | exports the DB to `public/data/`. Run by `dev` and `build`. |
+| `npm run db:studio` | browse and edit the DB in a browser |
+| `npm run db:generate` | schema changed → write a migration |
+| `npm run db:migrate` | apply pending migrations to the committed `.db` |
 
 | Output | Contents | Size |
 |---|---|---|
-| `public/data/index.json` | 148 shows, era-grouped | 15 KB |
+| `public/data/index.json` | 148 shows, era-grouped | 17 KB |
 | `public/data/shows/<slug>.json` | one show's episodes | 2–60 KB |
-| `public/data/search.json` | `[slug, id, title]` for episode search | 346 KB, fetched on the first search |
+| `public/data/search.json` | `[slug, id, title, host, date]` for episode search | 399 KB, fetched on the first search |
 
-The source is yt-dlp output, so per episode it:
+### Where the fields come from
+
+The source is yt-dlp output: a show name and a file path, nothing else. Every other field is
+parsed out of the filename by `scripts/lib/derive.mjs`, which runs **once, at import** — so a
+title can be inspected and corrected instead of only re-derived. Per episode it:
 
 - restores filename-safe glyphs (`⧸ ＂ ｜ ？ ：` → `/ " | ? :`);
 - extracts the date (`(04.04.2016)`, `24/06/2021`, `08 марта 2014` — uk + ru month names) and
-  season/episode (`сезон 1 эпизод 3`, `s11e51`, `Ep 4`) into fields;
+  season/episode (`сезон 1 эпизод 3`, `s11e51`, `Ep 4`) into columns;
 - strips the repeated show-name prefix, tolerating Cyrillic/Latin homoglyphs (`5х300` vs `5x300`);
-- keeps the original string in `r` as a display fallback.
+- moves a recurring host phrase (`з Олексієм Коганом`) out of the title and into `host`;
+- keeps the original filename in `raw_title`, emitted as `r`.
 
 Coverage: 4,180 episodes with a full date, 4,205 with a year, 3,208 with season/episode, 3,849
-prefix-stripped. The 748 episodes whose filename said nothing beyond season and date get an empty
-title and render as *Без назви* — their `s1e1` and `05.04.16` columns already say it.
+prefix-stripped, 197 with a host. The 890 episodes whose filename said nothing beyond season and
+date get an empty title and render as *Без назви* — their `s1e1` and `05.04.16` columns already
+say it. An empty title is a real value, not a missing one; it is also what excludes a row from
+the search index.
+
+### Fixing what the parser got wrong
+
+`db:import` rebuilds the derived columns, so editing them directly gets overwritten. Put a
+show-level correction in `show_overrides` instead — the `v_*` views `COALESCE` it over the
+derived values, so a fix applies on the next `npm run data`, needs no re-import, and survives
+one:
+
+```sql
+INSERT INTO show_overrides (show_id, name) VALUES (12, 'Правильна назва');
+```
+
+`NULL` in an override column means "no opinion, use the derived value". Note that the `sqlite3`
+CLI has foreign keys **off** by default, so a typo'd id inserts a silently dangling row —
+`PRAGMA foreign_keys=ON;` first, or use `npm run db:studio`.
+
+### Schema changes
+
+`db/schema.js` is the schema's source of truth; `db/migrations/` is generated from it. Because
+the `.db` is committed, a change is three steps and one commit:
+
+```sh
+$EDITOR db/schema.js
+npm run db:generate     # -> db/migrations/NNNN_name.sql
+npm run db:migrate      # applies it to db/aristocrats.db
+git add db/             # commit the migration AND the .db together
+```
+
+Views are the exception: they are not diffable, so they live in a hand-written
+`drizzle-kit generate --custom` migration (see `0001_views_and_eras.sql`) and are declared
+`.existing()` in `db/schema.js`. Changing one means a new migration that drops and recreates it.
+
+A new column is inert until the exporter emits it, so adding a field cannot disturb the output.
+The exporter opens the DB read-only and refuses to run if a migration is pending.
 
 Episode IDs are a hash of the file path, the only stable unique key. **They must not drift** —
-`localStorage` keys on them. The build fails on a collision.
+`localStorage` keys on them, so a drift silently wipes every visitor's listening history. The
+import fails on a collision, and `episodes.id` is copied, never recomputed.
 
 ## Listening state
 
@@ -83,7 +134,7 @@ One `localStorage` key, `aristocrats.v1`, debounced ~2s and flushed on `pagehide
 - manual played toggle per episode, plus mark-all / reset per show;
 - durations cached on first play (the source data has none);
 - per-show progress on the list, derived from snapshots without loading any show JSON;
-- episode lengths come from `durations.json` at build time, so rows show them before you press
+- episode lengths come from `episodes.duration` at build time, so rows show them before you press
   play; the value measured during playback is only a fallback;
 - a `×` on each «Продовжити» row drops the resume point without marking the episode played.
   Dismissing the episode that is currently loaded also unloads the player — otherwise the 5s

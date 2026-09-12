@@ -7,7 +7,11 @@
     "data": "node scripts/build-data.mjs",
     "dev": "npm run data && vite",
     "build": "npm run data && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "drizzle-kit migrate",
+    "db:studio": "drizzle-kit studio",
+    "db:import": "node scripts/import-tracks.mjs"
   },
   "dependencies": {
     "@preact/signals": "^2.0.1",
@@ -16,6 +20,9 @@
   },
   "devDependencies": {
     "@preact/preset-vite": "^2.10.1",
+    "better-sqlite3": "^13.0.3",
+    "drizzle-kit": "^0.31.10",
+    "drizzle-orm": "^0.45.2",
     "vite": "^6.2.0"
   },
   "allowScripts": {

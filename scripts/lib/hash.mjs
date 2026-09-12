@@ -1,7 +1,9 @@
 /**
  * FNV-1a over the file path — the only stable unique key in the source data.
  * localStorage keys on the result, so it must not drift between rebuilds.
- * Shared by build-data.mjs and scan-durations.mjs so both agree.
+ *
+ * Called only by import-tracks.mjs now: the result is stored as episodes.id,
+ * and everything downstream copies that column rather than re-hashing.
  */
 export function hashId(str) {
   let h = 0x811c9dc5

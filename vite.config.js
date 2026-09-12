@@ -4,7 +4,7 @@ import preact from '@preact/preset-vite'
 // Privacy-friendly analytics by Plausible. Injected here rather than written
 // into index.html so that `apply: 'build'` can keep it out of `npm run dev` —
 // a dev session should never show up in the numbers. `window.plausible` is
-// therefore undefined in dev, which src/lib/analytics.js accounts for.
+// therefore undefined in dev, which src/lib/track.js accounts for.
 //
 // hashBasedRouting is required, not optional: routing is `#/show/<slug>` via
 // wouter's useHashLocation, and the tracker's default mode only reports a
