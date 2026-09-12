@@ -5,8 +5,9 @@
 // Four groups of tables, and the difference between them is what survives a
 // re-seed:
 //   derived      shows, episodes            — rebuilt by import-tracks.mjs
-//                                             (duration / probed_at are not)
-//   accumulated  episodes.duration          — never wiped on re-seed
+//                                             (site metadata / duration are not)
+//   accumulated  show/episode site metadata,
+//                episodes.duration          — never wiped on re-seed
 //   overrides    show_overrides             — hand fixes, layered on by the views
 //   config       eras, meta                 — reference data and provenance
 
@@ -29,6 +30,11 @@ export const shows = sqliteTable('shows', {
   sourceName: text('source_name').notNull().unique(),
   // Dominant host phrase ("з Олексієм Коганом"), NULL for most shows.
   host: text('host'),
+  // Scraped from aristocrats.fm by parse-aristocrats-podcasts.mjs. `image`
+  // stores only the filename; the committed source file is in assets/podcasts.
+  image: text('image'),
+  description: text('description'),
+  siteUrl: text('site_url'),
 })
 
 export const episodes = sqliteTable(
@@ -52,6 +58,9 @@ export const episodes = sqliteTable(
     title: text('title').notNull(),
     // Per-episode host phrase, when the show repeats one.
     host: text('host'),
+    // Show notes (or, when that is all the source has, a tracklist) scraped
+    // from the matching aristocrats.fm podcast row.
+    description: text('description'),
     date: text('date'),
     // Set whenever a year could be read, including when `date` is also set —
     // the show's year span is a MIN/MAX over this column.
@@ -121,6 +130,9 @@ export const vShows = sqliteView('v_shows', {
   slug: text('slug'),
   name: text('name'),
   host: text('host'),
+  image: text('image'),
+  description: text('description'),
+  siteUrl: text('site_url'),
 }).existing()
 
 export const vEpisodes = sqliteView('v_episodes', {
@@ -131,6 +143,7 @@ export const vEpisodes = sqliteView('v_episodes', {
   rawTitle: text('raw_title'),
   title: text('title'),
   host: text('host'),
+  description: text('description'),
   date: text('date'),
   year: integer('year'),
   season: integer('season'),
@@ -144,6 +157,9 @@ export const vShowIndex = sqliteView('v_show_index', {
   slug: text('slug'),
   name: text('name'),
   host: text('host'),
+  image: text('image'),
+  description: text('description'),
+  siteUrl: text('site_url'),
   n: integer('n'),
   secs: integer('secs'),
   y0: integer('y0'),

@@ -66,6 +66,8 @@ function build() {
         slug: show.slug,
         name: show.name,
         host: drop(show.host),
+        img: drop(show.image),
+        desc: drop(show.description),
         secs: drop(show.secs),
         episodes,
       }),
@@ -79,6 +81,8 @@ function build() {
     slug: s.slug,
     name: s.name,
     host: drop(s.host),
+    img: drop(s.image),
+    desc: drop(s.description),
     n: s.n,
     secs: drop(s.secs),
     // Explicitly null, unlike the keys above: the frontend tests truthiness.
@@ -125,6 +129,7 @@ function toEpisode(e) {
   if (e.season != null) ep.s = e.season
   if (e.episode != null) ep.e = e.episode
   if (e.host) ep.a = e.host
+  if (e.description) ep.desc = e.description
   return ep
 }
 

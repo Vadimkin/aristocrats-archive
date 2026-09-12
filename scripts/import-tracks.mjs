@@ -4,8 +4,8 @@
 //
 // This is where every regex in the pipeline runs: the filename is parsed once,
 // here, and the result is stored. `npm run data` then only queries. Safe to
-// re-run — it upserts on natural keys, so hand fixes in `show_overrides`
-// and probed `episodes.duration` both survive.
+// re-run — it upserts only derived columns, so hand fixes in `show_overrides`,
+// aristocrats.fm metadata, and probed `episodes.duration` all survive.
 //
 // Run: npm run db:import
 
@@ -117,6 +117,8 @@ function persist(db, sqlite, derived, legacyDurations) {
   for (const show of derived) {
     // Matching on source_name keeps shows.id stable across re-imports, so the
     // show_overrides rows that point at it stay pointed at the right show.
+    // Deliberately omit image/description/siteUrl from both values and set:
+    // those accumulated fields belong to parse-aristocrats-podcasts.mjs.
     const [{ id: showId }] = db
       .insert(shows)
       .values({
@@ -141,7 +143,8 @@ function persist(db, sqlite, derived, legacyDurations) {
     markShow.run(show.sourceName)
 
     // The episode id is a hash of the path, so it is stable by construction —
-    // duration and localStorage keys stay pointed at the same row after a re-seed.
+    // description, duration and localStorage keys stay pointed at the same row
+    // after a re-seed. Description is deliberately absent from row/set.
     for (const [i, ep] of show.eps.entries()) {
       const row = {
         id: ep.id,

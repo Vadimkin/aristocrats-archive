@@ -51,12 +51,15 @@ the build only reads it:
 ```
 scripts/data/tracks.json     ──┐                                        ┌─ public/data/index.json
                                ├─ db:import ─► db/aristocrats.db ─ data ─┼─ public/data/shows/<slug>.json
-scripts/data/durations.json  ──┘   (parses)      (source of truth)       └─ public/data/search.json
+scripts/data/durations.json  ──┘   (parses)    ▲ (source of truth)       └─ public/data/search.json
+aristocrats.fm/podcasts/ ─ db:parse-aristocrats-podcasts
+                          └─ covers ─► assets/podcasts/
 ```
 
 | Command | Does |
 |---|---|
 | `npm run db:import` | re-seeds the DB from `scripts/data/*.json`. Idempotent. |
+| `npm run db:parse-aristocrats-podcasts` | matches aristocrats.fm shows/episodes, downloads covers, and imports descriptions. |
 | `npm run data` | exports the DB to `public/data/`. Run by `dev` and `build`. |
 | `npm run db:studio` | browse and edit the DB in a browser |
 | `npm run db:generate` | schema changed → write a migration |
@@ -86,6 +89,12 @@ prefix-stripped, 197 with a host. The 890 episodes whose filename said nothing b
 date get an empty title and render as *Без назви* — their `s1e1` and `05.04.16` columns already
 say it. An empty title is a real value, not a missing one; it is also what excludes a row from
 the search index.
+
+Show covers and descriptions, and episode descriptions/tracklists, come from
+`aristocrats.fm/podcasts/`. `npm run db:parse-aristocrats-podcasts` conservatively matches the
+site catalog to existing DB rows; it never inserts a new show or episode. Covers are committed
+under `assets/podcasts/`, while `shows.image` stores only the filename. Site metadata is
+accumulated data: a later `db:import` does not overwrite it.
 
 ### Fixing what the parser got wrong
 
