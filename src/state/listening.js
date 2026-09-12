@@ -86,6 +86,7 @@ export const metaFor = (ep, show) => ({
   n: fullShowName(show, ep),
   p: ep.p,
   d: ep.d,
+  i: show.img,
 })
 
 export function countDone(episodes) {
@@ -126,6 +127,7 @@ export const inProgress = computed(() =>
       d: e.m.d,
       slug: e.m.s,
       showName: e.m.n,
+      img: e.m.i,
       pos: e.pos,
       dur: e.dur ?? 0,
     })),

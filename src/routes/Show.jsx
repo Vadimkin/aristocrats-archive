@@ -8,6 +8,7 @@ import { Header } from '../components/Header.jsx'
 import { EpisodeRow } from '../components/EpisodeRow.jsx'
 import { episodeWord, yearSpan, runtime, fullShowName } from '../lib/format.js'
 import { useTitle } from '../lib/title.js'
+import { podcastImage } from '../lib/podcast-image.js'
 
 export function Show({ slug }) {
   const [show, setShow] = useState(null)
@@ -44,6 +45,7 @@ export function Show({ slug }) {
   const done = countDone(show.episodes)
   const years = yearsOf(show.episodes)
   const fav = isFav(slug)
+  const cover = podcastImage(show.img)
 
   return (
     <div class="page">
@@ -51,21 +53,26 @@ export function Show({ slug }) {
       <div class="wrap">
         <BackRow />
 
-        <div class="show-head">
-          <h1>
-            {show.name}
-            {show.host && <span class="host"> {show.host}</span>}
-          </h1>
-          <div class="sub">
-            {total} {episodeWord(total)}
-            {years && ` · ${years}`}
-            {show.secs ? ` · ${runtime(show.secs)}` : ''}
-            {` · ${done} з ${total} прослухано`}
-          </div>
-          <div class="progress" aria-hidden="true">
-            <i style={{ width: `${total ? (done / total) * 100 : 0}%` }} />
+        <div class={`show-head${cover ? ' has-cover' : ''}`}>
+          {cover && <img class="show-cover" src={cover} alt={`Обкладинка ${show.name}`} />}
+          <div class="show-head-body">
+            <h1>
+              {show.name}
+              {show.host && <span class="host"> {show.host}</span>}
+            </h1>
+            <div class="sub">
+              {total} {episodeWord(total)}
+              {years && ` · ${years}`}
+              {show.secs ? ` · ${runtime(show.secs)}` : ''}
+              {` · ${done} з ${total} прослухано`}
+            </div>
+            <div class="progress" aria-hidden="true">
+              <i style={{ width: `${total ? (done / total) * 100 : 0}%` }} />
+            </div>
           </div>
         </div>
+
+        {show.desc && <p class="show-description">{show.desc}</p>}
 
         <div class="actions">
           <button class={fav ? 'on' : ''} onClick={() => toggleFav(slug)}>

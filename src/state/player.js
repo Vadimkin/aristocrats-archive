@@ -4,8 +4,9 @@ import { store, mutate, mutateQuietly, episodeEntry, showEntry } from './storage
 import { resumePos } from './listening.js'
 import { fullShowName } from '../lib/format.js'
 import { track } from '../lib/track.js'
+import { podcastImage } from '../lib/podcast-image.js'
 
-export const current = signal(null) // { id, t, p, slug, showName, d }
+export const current = signal(null) // { id, t, p, slug, showName, d, img }
 export const playing = signal(false)
 export const stalled = signal(false)
 export const time = signal(0)
@@ -23,6 +24,7 @@ export const toItem = (ep, show) => ({
   d: ep.d,
   slug: show.slug,
   showName: fullShowName(show, ep),
+  img: show.img,
 })
 
 /**
@@ -30,8 +32,9 @@ export const toItem = (ep, show) => ({
  * top up one written before rows carried a date.
  */
 function snapshot(e, item) {
-  e.m ??= { t: item.t, s: item.slug, n: item.showName, p: item.p, d: item.d }
+  e.m ??= { t: item.t, s: item.slug, n: item.showName, p: item.p, d: item.d, i: item.img }
   if (item.d && !e.m.d) e.m.d = item.d
+  if (item.img && !e.m.i) e.m.i = item.img
 }
 
 // ------------------------------------------------------------------ element
@@ -236,12 +239,23 @@ export function setVolume(value) {
 // Built per call rather than once at module scope: the OS resolves these
 // itself, with no document to resolve a relative path against, so they have to
 // be absolute — and a sub-path deploy means they are not at the origin root.
-const artwork = () =>
-  [96, 192, 512].map((size) => ({
+const artwork = (filename) => {
+  const image = podcastImage(filename)
+  if (image) {
+    const extension = filename.split('.').pop()?.toLowerCase()
+    const type = extension === 'png'
+      ? 'image/png'
+      : extension === 'webp'
+        ? 'image/webp'
+        : 'image/jpeg'
+    return [{ src: new URL(image, location.href).href, type }]
+  }
+  return [96, 192, 512].map((size) => ({
     src: new URL(`${import.meta.env.BASE_URL}cover-${size}.jpg`, location.href).href,
     sizes: `${size}x${size}`,
     type: 'image/jpeg',
   }))
+}
 
 function updateMediaSession(item) {
   const ms = navigator.mediaSession
@@ -252,7 +266,7 @@ function updateMediaSession(item) {
     title: item.t || 'Без назви',
     artist: item.showName,
     album: 'Aristocrats FM',
-    artwork: artwork(),
+    artwork: artwork(item.img),
   })
   ms.setActionHandler('play', () => toggle())
   ms.setActionHandler('pause', () => toggle())

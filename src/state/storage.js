@@ -4,7 +4,7 @@ import { STORAGE_KEY, STORAGE_VERSION } from '../config.js'
 // Shape:
 // {
 //   version, updatedAt,
-//   episodes: { [id]: { pos, dur, done, doneAt, playedAt, m: {t, s, n, p} } },
+//   episodes: { [id]: { pos, dur, done, doneAt, playedAt, m: {t, s, n, p, d, i} } },
 //   shows:    { [slug]: { fav, lastPlayedId } },
 //   player:   { current, queue, index, rate, volume },
 // }

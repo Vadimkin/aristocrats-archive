@@ -127,6 +127,7 @@ function ContinueSection() {
                   d: item.d,
                   slug: item.slug,
                   showName: item.showName,
+                  img: item.img,
                 })
               }
             >

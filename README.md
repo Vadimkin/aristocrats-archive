@@ -246,7 +246,8 @@ show and back. The field is 16px so iOS does not zoom the page on focus.
 - Hash routing (`#/`, `#/show/:slug`, `#/settings`) — no server rewrites needed, and the `<audio>`
   element never unmounts, so playback survives navigation.
 - Player: one episode at a time — play/pause, ±15/30s, scrubber, volume, MediaSession lock-screen
-  controls. No queue, so nothing plays after the current episode ends.
+  controls and the show's cover where one is available. No queue, so nothing plays after the
+  current episode ends.
 - Keyboard: `space`/`k` play-pause, `←`/`→` seek, `/` focus search.
 - Initial payload is ~25 KB gzipped.
 - Settings live behind the gear in the header (`#/settings`).
