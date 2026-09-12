@@ -49,14 +49,10 @@ export function Settings() {
 
       <div class="section-head"><h2>Експорт</h2></div>
       <div class="actions">
-        <button onClick={download}>↓ Зберегти файл</button>
+        <button onClick={download}>↓ Зберегти історію прослуховувань</button>
       </div>
 
       <div class="section-head"><h2>Імпорт</h2></div>
-      <p class="note">
-        Дані з файлу завжди обʼєднуються з поточними: прослухане з обох боків зберігається,
-        свіжіша позиція перемагає. Нічого не втрачається.
-      </p>
       <input
         class="file"
         type="file"
@@ -70,7 +66,6 @@ export function Settings() {
       {msg && <p class="note ok">{msg}</p>}
       {err && <p class="note bad">{err}</p>}
 
-      <div class="section-head"><h2>Небезпечна зона</h2></div>
       <div class="actions">
         <button
           class="danger"
@@ -82,7 +77,7 @@ export function Settings() {
             }
           }}
         >
-          Стерти все
+          Очистити історію прослуховувань
         </button>
       </div>
       </div>

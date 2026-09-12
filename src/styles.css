@@ -160,9 +160,8 @@ h2 { font-size: 15px; margin: 28px 0 6px; letter-spacing: 0.01em; }
   height: clamp(64px, 6vw, 96px);
   width: auto;
   /* The mark is a mask filled with an embedded raster, so there is no fill to
-     override — flatten it to black, then invert to white. Shadow last, so it
-     is cast by the white shape. */
-  filter: brightness(0) invert(1) drop-shadow(0 1px 4px rgba(0, 0, 0, 0.5));
+     override — flatten it to black, then invert to white. */
+  filter: brightness(0) invert(1);
 }
 
 .masthead .gear {
