@@ -1,11 +1,11 @@
-// Public Cloudflare R2 bucket. The r2.dev host serves the bucket root, so paths
+// Public S3-compatible archive. The host serves the bucket root, so paths
 // from tracks.json ("aristocrats/<show>/<file>.m4a") append directly — do NOT
 // re-add the "aristocratsfm/" bucket segment from the old S3 endpoint (404s).
 //
 // The bucket sends no Access-Control-Allow-Origin. A bare <audio src> does not
 // need it, but adding crossorigin / fetch / Web Audio would break playback.
 export const AUDIO_BASE =
-  import.meta.env.VITE_AUDIO_BASE ?? 'https://pub-1fe55091488c44e09add307654535d58.r2.dev/'
+  import.meta.env.VITE_AUDIO_BASE ?? 'https://bobbin.aristocrats-archive.kyiv.ua/'
 
 // Paths in tracks.json are already percent-encoded. Never encode them again.
 export const audioUrl = (path) => AUDIO_BASE + path

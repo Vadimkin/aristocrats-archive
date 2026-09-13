@@ -22,23 +22,23 @@ The archive listing carries no durations. Lengths already live on `episodes.dura
 4,930 files, totalling **7,392 h**) and `db:import` never overwrites a non-NULL value, so a
 re-seed does not lose them. Missing lengths can still be filled from `scripts/data/durations.json`. The
 holdout is a `.temp.m4a`, an interrupted yt-dlp download with no finalised `moov` atom; it is
-on R2 too, so it will not play in a browser either and shows no length.
+on the archive too, so it will not play in a browser either and shows no length.
 
 ## Audio
 
-Files stream from the public Cloudflare R2 bucket in `src/config.js`:
+Files stream from the public S3-compatible archive in `src/config.js`:
 
 ```
-https://pub-1fe55091488c44e09add307654535d58.r2.dev/
+https://bobbin.aristocrats-archive.kyiv.ua/
 ```
 
 Override with `VITE_AUDIO_BASE` at build time.
 
 Two constraints, both load-bearing:
 
-- **No bucket prefix.** r2.dev serves the bucket root, so the stored paths
+- **No bucket prefix.** The host serves the bucket root, so the stored paths
   (`aristocrats/<show>/<file>.m4a`, already percent-encoded) append directly. Re-adding the
-  `aristocratsfm/` segment from the S3 endpoint 404s, and re-encoding the path breaks it.
+  `aristocratsfm/` segment from the old S3 endpoint 404s, and re-encoding the path breaks it.
 - **No `crossorigin` on `<audio>`.** The bucket sends no `Access-Control-Allow-Origin`. A plain
   media load does not need one, but `crossorigin`, `fetch`, or Web Audio would fail — which also
   rules out a waveform/visualizer until CORS is configured.
@@ -251,7 +251,6 @@ show and back. The field is 16px so iOS does not zoom the page on focus.
 - Keyboard: `space`/`k` play-pause, `←`/`→` seek, `/` focus search.
 - Initial payload is ~25 KB gzipped.
 - Settings live behind the gear in the header (`#/settings`).
-- Deploy `dist/` to any static host. The build is pinned to the `/aristocrats/` sub-path
-  (`base` in `vite.config.js`), which is where dev is served from; every asset and data URL is
-  built from `import.meta.env.BASE_URL`, so nothing else needs touching. For a root deploy:
-  `BASE_PATH=/ npm run build`.
+- Deploy `dist/` to any static host. The build is served from `/` (`base` in `vite.config.js`);
+  every asset and data URL is built from `import.meta.env.BASE_URL`. For a sub-path deploy:
+  `BASE_PATH=/aristocrats/ npm run build`.

@@ -52,6 +52,7 @@ export function EpisodeRow({ ep, show, onPlay }) {
             {date && <span>{date}</span>}
           </span>
         )}
+        {ep.desc && <span class="desc">{ep.desc}</span>}
       </span>
 
       <span class="len">{length}</span>

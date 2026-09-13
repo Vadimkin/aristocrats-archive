@@ -289,6 +289,13 @@ mark {
   gap: 8px;
   flex-wrap: wrap;
 }
+.ep .desc {
+  display: block;
+  font-size: 12.5px;
+  color: var(--dim);
+  line-height: 1.4;
+  white-space: pre-line;
+}
 .ep .len { font-size: 13px; color: var(--dim); font-variant-numeric: tabular-nums; white-space: nowrap; }
 .ep.is-done .title { color: var(--dim); }
 .ep.is-current .title { font-weight: 600; color: var(--fg); }
@@ -508,6 +515,11 @@ mark {
   font-size: 12.5px;
   color: var(--dim);
   font-variant-numeric: tabular-nums;
+}
+
+.footer-notice {
+  margin: 8px 0 0;
+  font-variant-numeric: normal;
 }
 
 .empty { color: var(--dim); padding: 24px 0; font-size: 14.5px; }

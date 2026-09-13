@@ -2,7 +2,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { Link } from 'wouter-preact'
 import { loadShow } from '../lib/data.js'
 import { store } from '../state/storage.js'
-import { countDone, isFav, toggleFav, setManyDone, clearShow } from '../state/listening.js'
+import { countDone, isFav, toggleFav, clearShow } from '../state/listening.js'
 import { toItem, play } from '../state/player.js'
 import { Header } from '../components/Header.jsx'
 import { EpisodeRow } from '../components/EpisodeRow.jsx'
@@ -77,9 +77,6 @@ export function Show({ slug }) {
         <div class="actions">
           <button class={fav ? 'on' : ''} onClick={() => toggleFav(slug)}>
             {fav ? '★ В обраному' : '☆ В обране'}
-          </button>
-          <button onClick={() => setManyDone(show.episodes, true, show)} disabled={done === total}>
-            Позначити все прослуханим
           </button>
           <button class="danger" onClick={() => clearShow(show.episodes)} disabled={!done}>
             Скинути

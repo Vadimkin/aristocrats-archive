@@ -68,13 +68,20 @@ export function Shows() {
           </>
         )}
 
-        {data && (
-          <div class="footer">
-            {grouped(data.totals.shows)} {showWord(data.totals.shows)} ·{' '}
-            {grouped(data.totals.episodes)} {episodeWord(data.totals.episodes)} ·{' '}
-            {hours(data.totals.seconds)} ефіру
-          </div>
-        )}
+        <div class="footer">
+          {data && (
+            <div>
+              {grouped(data.totals.shows)} {showWord(data.totals.shows)} ·{' '}
+              {grouped(data.totals.episodes)} {episodeWord(data.totals.episodes)} ·{' '}
+              {hours(data.totals.seconds)} ефіру
+            </div>
+          )}
+          <p class="footer-notice">
+            Всі права належать{' '}
+            <a href="https://www.facebook.com/aristocratsfm/" target="_blank" rel="noopener noreferrer">Радіо Аристократи</a>.
+            {' '}Подкасти агреговано з MixCloud.
+          </p>
+        </div>
       </div>
     </div>
   )

@@ -55,23 +55,6 @@ export function forgetPosition(id) {
   })
 }
 
-export function setManyDone(episodes, done, show) {
-  mutate((db) => {
-    for (const ep of episodes) {
-      const e = episodeEntry(db, ep.id)
-      e.done = done
-      if (done) {
-        e.doneAt = Date.now()
-        delete e.pos
-        e.m ??= metaFor(ep, show)
-      } else {
-        delete e.doneAt
-        delete e.pos
-      }
-    }
-  })
-}
-
 /** Forget a show entirely: played marks and positions for all its episodes. */
 export function clearShow(episodes) {
   mutate((db) => {
