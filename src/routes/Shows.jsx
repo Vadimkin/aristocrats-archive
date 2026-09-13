@@ -78,8 +78,8 @@ export function Shows() {
           )}
           <p class="footer-notice">
             Всі права належать{' '}
-            <a href="https://www.facebook.com/aristocratsfm/" target="_blank" rel="noopener noreferrer">Радіо Аристократи</a>.
-            {' '}Подкасти агреговано з MixCloud.
+            <a href="https://www.facebook.com/aristocratsfm/" target="_blank" rel="noopener noreferrer">Радіо Аристократи</a>
+            {' · '}Подкасти агреговано з MixCloud
             {' · '}Сайт створив{' '}
             <a href="https://vadymklymenko.com/" target="_blank" rel="noopener noreferrer">Вадим Клименко</a>
           </p>
