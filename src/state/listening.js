@@ -55,13 +55,6 @@ export function forgetPosition(id) {
   })
 }
 
-/** Forget a show entirely: played marks and positions for all its episodes. */
-export function clearShow(episodes) {
-  mutate((db) => {
-    for (const ep of episodes) delete db.episodes[ep.id]
-  })
-}
-
 /** Minimal snapshot so "Продовжити" can render without loading show JSON. */
 export const metaFor = (ep, show) => ({
   t: ep.t,

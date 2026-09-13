@@ -4,8 +4,8 @@ import { current, playing } from '../state/player.js'
 
 // Kept in step with the static <title> in index.html by hand — that one is what
 // shows in the tab until the bundle boots, so the two should read the same.
-const SITE = 'Аристократи'
-const HOME_TITLE = `${SITE} — архів подкастів`
+const SITE = 'Архів Аристократів'
+const HOME_TITLE = SITE
 
 // What the route wants the tab to say, or null for the landing page. A signal
 // rather than a direct document.title write because playback can override it at

@@ -16,12 +16,12 @@ export function Header() {
       }}
     >
       <div class="masthead-inner">
-        <Link class="brand" href="/" aria-label="Аристократи — на головну">
+        <Link class="brand" href="/" aria-label="Архів Аристократів — на головну">
           <img src={`${base}logo.svg`} alt="" width="34" height="44" />
-          <span class="wordmark">Аристократи</span>
+          <span class="wordmark">Архів Аристократів</span>
         </Link>
 
-        <p class="tagline">Архів випущених подкастів</p>
+        <p class="tagline">Фан-каталог подкастів інтернет-радіостанції</p>
 
         <SettingsLink />
       </div>

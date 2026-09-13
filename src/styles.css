@@ -396,8 +396,6 @@ mark {
   border-bottom: 1px solid var(--line);
 }
 .actions button { color: var(--link); }
-.actions button.danger { color: var(--warn); }
-.actions button:disabled { color: var(--dimmer); cursor: default; }
 
 .filters {
   display: flex;

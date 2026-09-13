@@ -140,7 +140,7 @@ One `localStorage` key, `aristocrats.v1`, debounced ~2s and flushed on `pagehide
 
 - auto-complete at 95% played (or under 30s left), and on `ended` — playback then stops;
 - resume position, written every ~5s, discarded below 15s so a stray tap is not a resume point;
-- manual played toggle per episode, plus mark-all / reset per show;
+- manual played toggle per episode;
 - durations cached on first play (the source data has none);
 - per-show progress on the list, derived from snapshots without loading any show JSON;
 - episode lengths come from `episodes.duration` at build time, so rows show them before you press
