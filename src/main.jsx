@@ -1,7 +1,6 @@
 import { render } from 'preact'
 import { useEffect } from 'preact/hooks'
 import { Router, Route, Switch, Link } from 'wouter-preact'
-import { useHashLocation } from 'wouter-preact/use-hash-location'
 import { Shows } from './routes/Shows.jsx'
 import { Show } from './routes/Show.jsx'
 import { Settings } from './routes/Settings.jsx'
@@ -12,11 +11,30 @@ import './styles.css'
 
 restore()
 
+// Old bookmarks and shared links used `#/show/<slug>`. `location.replace`
+// (not replaceState) so this also works when the hash is applied to an already
+// mounted page — wouter only reads pathname, and replaceState would leave it
+// on `/`. BASE_URL is `/` on the root deploy and `/aristocrats/` on a sub-path
+// one — strip the trailing slash so `/show/foo` lands at
+// `/aristocrats/show/foo`, not `/aristocrats//show/foo`.
+function redirectLegacyHash() {
+  const hash = location.hash
+  if (!hash.startsWith('#/')) return false
+  const base = import.meta.env.BASE_URL.replace(/\/$/, '')
+  location.replace(base + hash.slice(1) + location.search)
+  return true
+}
+
+const leavingForPath = redirectLegacyHash()
+if (!leavingForPath) addEventListener('hashchange', redirectLegacyHash)
+
+const routerBase = import.meta.env.BASE_URL.replace(/\/$/, '')
+
 function App() {
   useKeyboardShortcuts()
 
   return (
-    <Router hook={useHashLocation}>
+    <Router base={routerBase}>
       <Switch>
         <Route path="/" component={Shows} />
         <Route path="/show/:slug">{(params) => <Show slug={params.slug} />}</Route>
@@ -67,4 +85,4 @@ function useKeyboardShortcuts() {
   }, [])
 }
 
-render(<App />, document.getElementById('app'))
+if (!leavingForPath) render(<App />, document.getElementById('app'))

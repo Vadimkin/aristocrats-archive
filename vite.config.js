@@ -4,16 +4,9 @@ import preact from '@preact/preset-vite'
 // Privacy-friendly analytics by Plausible. Injected here rather than written
 // into index.html so that `apply: 'build'` can keep it out of `npm run dev` —
 // a dev session should never show up in the numbers. `window.plausible` is
-// therefore undefined in dev, which src/lib/track.js accounts for.
-//
-// hashBasedRouting is required, not optional: routing is `#/show/<slug>` via
-// wouter's useHashLocation, and the tracker's default mode only reports a
-// pageview when location.pathname changes — which it never does here, so every
-// route past the landing page went unrecorded. The flag also sets `h=1` on the
-// payload, which is what makes the backend keep the hash instead of collapsing
-// every route into one URL; that is why a hand-rolled plausible('pageview')
-// call on route change would not have been enough.
-const PLAUSIBLE_SRC = 'https://beartown.vadymklymenko.com/js/pa-2ZES4Hbqe40ijj5MYOEHc.js'
+// therefore undefined in dev, which src/lib/track.js accounts for. Routes are
+// real paths (`/show/<slug>`), so the tracker's default pathname mode is enough.
+const PLAUSIBLE_SRC = 'https://beartown.vadymklymenko.com/js/pa-Il2qsxEUkuDeoMA48acvq.js'
 
 const plausible = () => ({
   name: 'plausible-analytics',
@@ -26,7 +19,7 @@ const plausible = () => ({
       children:
         'window.plausible=window.plausible||function(){(plausible.q=plausible.q||[]).push(arguments)},' +
         'plausible.init=plausible.init||function(i){plausible.o=i||{}};' +
-        'plausible.init({hashBasedRouting:true})',
+        'plausible.init()',
     },
   ],
 })

@@ -152,7 +152,7 @@ One `localStorage` key, `aristocrats.v1`, debounced ~2s and flushed on `pagehide
 Position writes bypass the UI signal (`mutateQuietly`) and only notify on pause or track change —
 otherwise every visible row would re-render 4× a second.
 
-Export/import lives at `#/settings`. Import always merges — a union where done wins over not-done
+Export/import lives at `/settings`. Import always merges — a union where done wins over not-done
 and the newer `playedAt` wins for position — so nothing is ever lost. It validates the file version
 and refuses mismatches.
 
@@ -243,14 +243,15 @@ show and back. The field is 16px so iOS does not zoom the page on focus.
 
 ## Notes
 
-- Hash routing (`#/`, `#/show/:slug`, `#/settings`) — no server rewrites needed, and the `<audio>`
-  element never unmounts, so playback survives navigation.
+- Path routing (`/`, `/show/:slug`, `/settings`). The host must fall unknown paths back to
+  `index.html` (nginx `try_files` or equivalent). The `<audio>` element never unmounts, so
+  playback survives navigation. Old `#/` bookmarks are rewritten onto the matching path.
 - Player: one episode at a time — play/pause, ±15/30s, scrubber, volume, MediaSession lock-screen
   controls and the show's cover where one is available. No queue, so nothing plays after the
   current episode ends.
 - Keyboard: `space`/`k` play-pause, `←`/`→` seek, `/` focus search.
 - Initial payload is ~25 KB gzipped.
-- Settings live behind the gear in the header (`#/settings`).
+- Settings live behind the gear in the header (`/settings`).
 - Deploy `dist/` to any static host. The build is served from `/` (`base` in `vite.config.js`);
   every asset and data URL is built from `import.meta.env.BASE_URL`. For a sub-path deploy:
   `BASE_PATH=/aristocrats/ npm run build`.
