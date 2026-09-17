@@ -1,0 +1,3035 @@
+<!doctype html>
+<html lang="uk">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Вибір перекладів шоу — Архів Аристократів</title>
+  <style>
+    :root {
+      --bg: #f4f1ea;
+      --ink: #1c1914;
+      --muted: #6b6458;
+      --old: #8a2f2f;
+      --new: #1f5c3a;
+      --card: #fffdf8;
+      --line: #e4ddd0;
+      --accent: #1f5c3a;
+    }
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font: 16px/1.45 "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+      color: var(--ink);
+      background: var(--bg);
+      padding-bottom: 5.5rem;
+    }
+    header.hero {
+      padding: 2.5rem 1.25rem 1.5rem;
+      max-width: 72rem;
+      margin: 0 auto;
+    }
+    h1 { font-size: 1.75rem; margin: 0 0 .4rem; font-weight: 600; }
+    .lede { color: var(--muted); margin: 0 0 1.25rem; }
+    .stats { display: flex; gap: 1rem; flex-wrap: wrap; margin-bottom: 1rem; }
+    .stat {
+      background: var(--card);
+      border: 1px solid var(--line);
+      padding: .55rem .85rem;
+      border-radius: 8px;
+    }
+    .stat b { display: block; font-size: 1.25rem; }
+    .stat span { color: var(--muted); font-size: .85rem; }
+    .toolbar {
+      display: flex; gap: .75rem; flex-wrap: wrap; align-items: center;
+    }
+    input[type="search"] {
+      flex: 1; min-width: 16rem;
+      font: inherit; padding: .55rem .75rem;
+      border: 1px solid var(--line); border-radius: 8px; background: var(--card);
+    }
+    label.toggle { color: var(--muted); display: flex; gap: .4rem; align-items: center; }
+    main { max-width: 72rem; margin: 0 auto; padding: 0 1.25rem 3rem; }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 1rem 1.1rem 1.15rem;
+      margin-bottom: .85rem;
+    }
+    .card.on { border-color: #b7d4c3; box-shadow: 0 0 0 1px #b7d4c3 inset; }
+    .card header { display: flex; gap: .4rem; align-items: center; margin-bottom: .6rem; flex-wrap: wrap; }
+    .id { color: var(--muted); font-variant-numeric: tabular-nums; margin-right: .3rem; }
+    .picks { margin-left: auto; display: flex; gap: .6rem; flex-wrap: wrap; }
+    .pick {
+      font: 13px/1.2 system-ui, sans-serif;
+      display: flex; gap: .35rem; align-items: center;
+      color: var(--ink);
+      background: #eef6f0;
+      border-radius: 999px;
+      padding: .28rem .6rem;
+    }
+    .tag {
+      font: 12px/1.2 system-ui, sans-serif;
+      padding: .2rem .45rem;
+      border-radius: 999px;
+      background: #eee8dc;
+      color: var(--muted);
+    }
+    .tag-name { background: #f3d9d4; color: var(--old); }
+    .tag-desc { background: #d7eadc; color: var(--new); }
+    .pair {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+    }
+    .pair h3 { margin: 0 0 .35rem; font-size: 1.15rem; font-weight: 600; }
+    .old { color: var(--old); }
+    .new { color: var(--new); }
+    .pair p { margin: 0; white-space: pre-wrap; }
+    .missing { color: var(--muted); font-style: italic; }
+    .bar {
+      position: sticky;
+      bottom: 0;
+      background: #1c1914;
+      color: #f4f1ea;
+      padding: .85rem 1.25rem;
+      display: flex;
+      gap: .6rem;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .bar button {
+      font: 14px/1.2 system-ui, sans-serif;
+      border: 0;
+      border-radius: 8px;
+      padding: .55rem .8rem;
+      cursor: pointer;
+      background: #fffdf8;
+      color: #1c1914;
+    }
+    .bar button.primary { background: #3d8f62; color: #fff; }
+    .bar .sum { margin-left: auto; font: 14px/1.3 system-ui, sans-serif; color: #d9d2c5; }
+    @media (max-width: 720px) {
+      .pair { grid-template-columns: 1fr; }
+      .bar .sum { margin-left: 0; }
+    }
+    body.filter-changed .unchanged { display: none; }
+  </style>
+</head>
+<body class="filter-changed">
+  <header class="hero">
+    <h1>Які шоу перекладати?</h1>
+    <p class="lede">Ліворуч — як зараз, праворуч — український варіант. Позначте, що замінювати; непозначене лишається старим.</p>
+    <div class="stats">
+      <div class="stat"><b>148</b><span>шоу</span></div>
+      <div class="stat"><b>77</b><span>інших назв</span></div>
+      <div class="stat"><b>55</b><span>інших описів</span></div>
+    </div>
+    <div class="toolbar">
+      <input type="search" id="q" placeholder="Пошук за назвою…" />
+      <label class="toggle"><input type="checkbox" id="onlyChanged" checked /> лише зі змінами</label>
+    </div>
+  </header>
+  <main>
+<article class="card unchanged" data-q="_неідентифіковані _неідентифіковані" data-id="1">
+  <header>
+    <span class="id">#1</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">_Неідентифіковані</h3>
+    </div>
+    <div>
+      <h3 class="new">_Неідентифіковані</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="#adayshow #adayshow" data-id="2">
+  <header>
+    <span class="id">#2</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">#ADayShow</h3>
+    </div>
+    <div>
+      <h3 class="new">#ADayShow</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Ідеальна атмосфера для процесу творення</p></div>
+    <div><p class="new">Ідеальна атмосфера для процесу творення</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="#музыкалечи #музикалікуй" data-id="3">
+  <header>
+    <span class="id">#3</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="3" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="3" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">#музыкалечи</h3>
+    </div>
+    <div>
+      <h3 class="new">#музикалікуй</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Лекарство от грусти из грустной музыки. Автор - Даша Коломиец.</p></div>
+    <div><p class="new">Ліки від смутку у вигляді сумної музики. Автор — Даша Коломієць.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="5x300 5x300" data-id="4">
+  <header>
+    <span class="id">#4</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">5x300</h3>
+    </div>
+    <div>
+      <h3 class="new">5x300</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Найглибший аналіз футболу від легендарного українського коментатора та його гостей. Спеціальний проект літа 2015.</p></div>
+    <div><p class="new">Найглибший аналіз футболу від легендарного українського коментатора та його гостей. Спеціальний проект літа 2015.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="alfa jazz fest alfa jazz fest" data-id="5">
+  <header>
+    <span class="id">#5</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Alfa Jazz Fest</h3>
+    </div>
+    <div>
+      <h3 class="new">Alfa Jazz Fest</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="aprize aprize" data-id="6">
+  <header>
+    <span class="id">#6</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Aprize</h3>
+    </div>
+    <div>
+      <h3 class="new">Aprize</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="beatology beatology" data-id="7">
+  <header>
+    <span class="id">#7</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Beatology</h3>
+    </div>
+    <div>
+      <h3 class="new">Beatology</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="bedstock live bedstock live" data-id="8">
+  <header>
+    <span class="id">#8</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Bedstock Live</h3>
+    </div>
+    <div>
+      <h3 class="new">Bedstock Live</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="bookself шоу bookself шоу" data-id="9">
+  <header>
+    <span class="id">#9</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Bookself Шоу</h3>
+    </div>
+    <div>
+      <h3 class="new">Bookself Шоу</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Улюблені книги улюблених людей. Авторська розважально-інформаційна щотижнева програма про книжки, що базується на проекті Bookchallenge_ua.
+Діджитал-ініціатива Bookchallenge_ua покликана спонукати людей читати більше і з задоволенням, мірятися і хвалитися результатами, заохочуючи одне одного в такий спосіб.</p></div>
+    <div><p class="new">Улюблені книги улюблених людей. Авторська розважально-інформаційна щотижнева програма про книжки, що базується на проекті Bookchallenge_ua.
+Діджитал-ініціатива Bookchallenge_ua покликана спонукати людей читати більше і з задоволенням, мірятися і хвалитися результатами, заохочуючи одне одного в такий спосіб.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="btw. нила тарасова btw. ніла тарасова" data-id="10">
+  <header>
+    <span class="id">#10</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="10" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="10" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">btw. Нила Тарасова</h3>
+    </div>
+    <div>
+      <h3 class="new">btw. Ніла Тарасова</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Музыкант, ди-джей и собиратель винила – как бы между прочим, но всегда кстати – в динамичном и разностороннем авторском аудиоблоге с разбором последних релизов, анонсами главных музивентов города и страны, новинками украинской инди-музыки и жанровой эклектикой</p></div>
+    <div><p class="new">Музикант, ді-джей та колекціонер вінілів — ніби між іншим, але завжди доречно — у динамічному та різнобічному авторському аудіоблозі з розбором останніх релізів, анонсами головних музичних подій міста та країни, новинками української інді-музики та жанровою еклектикою</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="cancer survivors day день людей, які пережили рак" data-id="11">
+  <header>
+    <span class="id">#11</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="11" /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Cancer Survivors Day</h3>
+    </div>
+    <div>
+      <h3 class="new">День людей, які пережили рак</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="futuristique сlub futuristique сlub" data-id="12">
+  <header>
+    <span class="id">#12</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="12" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">FuturistIQue Сlub</h3>
+    </div>
+    <div>
+      <h3 class="new">FuturistIQue Сlub</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">FuturistIQue club радио Аристократы — компетентные дебаты о будущем при участии лучших умов страны и планеты.</p></div>
+    <div><p class="new">Клуб FuturistIQue на радіо «Аристократи» — компетентні дебати про майбутнє за участю найкращих умів країни та планети.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="green day special спецвипуск, присвячений гурту green day" data-id="13">
+  <header>
+    <span class="id">#13</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="13" /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Green Day Special</h3>
+    </div>
+    <div>
+      <h3 class="new">Спецвипуск, присвячений гурту Green Day</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="homo amoris людина кохання" data-id="14">
+  <header>
+    <span class="id">#14</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="14" /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="14" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Homo Amoris</h3>
+    </div>
+    <div>
+      <h3 class="new">Людина кохання</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Homo Amoris, человек любящий. Для него нет запретных тем, как нет предела его мастерству в искусстве любить. Исследовательница медиакультуры, тиндер-евангелист Ольга Мельник и ироничная писательница Елена Андрейчикова развенчивают мифы о том самом великом чувстве.</p></div>
+    <div><p class="new">Homo Amoris, людина, що кохає. Для неї немає заборонених тем, як немає меж її майстерності в мистецтві кохання. Дослідниця медіакультури, «тіндер-євангелістка» Ольга Мельник та іронічна письменниця Олена Андрейчикова розвінчують міфи про те саме велике почуття.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="jazz time jazz time" data-id="15">
+  <header>
+    <span class="id">#15</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="15" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Jazz Time</h3>
+    </div>
+    <div>
+      <h3 class="new">Jazz Time</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Девятый сезон подряд автор и ведущий, известный джазмен знакомит нас с историей джаза и историями его исполнителей, делится тонкими эмоциями импровизации и спокойствием своего голоса в воскресном эфире</p></div>
+    <div><p class="new">Удев’яте поспіль автор і ведучий, відомий джазмен, знайомить нас з історією джазу та історіями його виконавців, ділиться тонким емоційним настроєм імпровізації та спокоєм свого голосу в недільному ефірі</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="keddrocast keddrocast" data-id="16">
+  <header>
+    <span class="id">#16</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="16" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Keddrocast</h3>
+    </div>
+    <div>
+      <h3 class="new">Keddrocast</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Говорим о девайсах, IT, железе и электронике. Путешествуем на мировые Технологические выставки. Тестируем лучшие образцы. Рассказываем о результатах на www.keddr.com</p></div>
+    <div><p class="new">Говоримо про гаджети, ІТ, «залізо» та електроніку. Відвідуємо світові технологічні виставки. Тестуємо найкращі зразки. Розповідаємо про результати на www.keddr.com</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="kitchen confidential кухонні таємниці" data-id="17">
+  <header>
+    <span class="id">#17</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="17" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="17" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Kitchen Confidential</h3>
+    </div>
+    <div>
+      <h3 class="new">Кухонні таємниці</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Шоу «Kitchen Confidential» это открытый диалог о еде во всевозможных смыслах, о всех тонкостях и нюансах ресторанного дела, об отношениях между гостем и заведением, о подходе к кухне и бару. Ничего личного.</p></div>
+    <div><p class="new">Шоу «Kitchen Confidential» — це відкритий діалог про їжу в усіх її проявах, про всі тонкощі та нюанси ресторанної справи, про стосунки між гостем і закладом, про підхід до кухні та бару. Нічого особистого.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="leroy new music leroy new music" data-id="18">
+  <header>
+    <span class="id">#18</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Leroy New Music</h3>
+    </div>
+    <div>
+      <h3 class="new">Leroy New Music</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="main ukrainian playlist основний український плейлист" data-id="19">
+  <header>
+    <span class="id">#19</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="19" /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Main Ukrainian Playlist</h3>
+    </div>
+    <div>
+      <h3 class="new">Основний український плейлист</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="martini aperitivo мартіні аперітіво" data-id="20">
+  <header>
+    <span class="id">#20</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="20" /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="20" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Martini Aperitivo</h3>
+    </div>
+    <div>
+      <h3 class="new">Мартіні Аперітіво</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Друзья, которых знаешь целую вечность. Разговоры, которые тянутся далеко за полночь. Музыка, благодаря которой праздник всегда с тобой. Это Aperitivo Time с Martini Negroni.</p></div>
+    <div><p class="new">Друзі, яких знаєш цілу вічність. Розмови, що тривають далеко за північ. Музика, завдяки якій свято завжди з тобою. Це Aperitivo Time з Martini Negroni.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="new hip-hop special новий хіп-хоп-спецвипуск" data-id="21">
+  <header>
+    <span class="id">#21</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="21" /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">New Hip-Hop Special</h3>
+    </div>
+    <div>
+      <h3 class="new">Новий хіп-хоп-спецвипуск</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="new jazz special нова джазова спеціальна програма" data-id="22">
+  <header>
+    <span class="id">#22</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="22" /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">New Jazz Special</h3>
+    </div>
+    <div>
+      <h3 class="new">Нова джазова спеціальна програма</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="newsroom с юлией макгаффи newsroom з юлією макгаффі" data-id="23">
+  <header>
+    <span class="id">#23</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="23" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Newsroom с Юлией МакГаффи</h3>
+    </div>
+    <div>
+      <h3 class="new">Newsroom з Юлією МакГаффі</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="nonpareil неперевершений" data-id="24">
+  <header>
+    <span class="id">#24</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="24" /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Nonpareil</h3>
+    </div>
+    <div>
+      <h3 class="new">Неперевершений</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="punkt.de punkt.de" data-id="25">
+  <header>
+    <span class="id">#25</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="25" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Punkt.de</h3>
+    </div>
+    <div>
+      <h3 class="new">Punkt.de</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Kultur, Wissenschaft, Musik,Technologie</p></div>
+    <div><p class="new">Культура, наука, музика, технології</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="sivash sivash" data-id="26">
+  <header>
+    <span class="id">#26</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">SIVASH</h3>
+    </div>
+    <div>
+      <h3 class="new">SIVASH</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="solar night солярна ніч" data-id="27">
+  <header>
+    <span class="id">#27</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="27" /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="27" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">SOLAR NIGHT</h3>
+    </div>
+    <div>
+      <h3 class="new">СОЛЯРНА НІЧ</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Звуковые волны прямиком из космических глубин. Тщательно подобранные новинки «ночной электроники», начиная с дип-хауса и uk гэридж, заканчивая абстрактным хип-хопом и атмосферной бэйс-музыкой</p></div>
+    <div><p class="new">Звукові хвилі прямо з космічних глибин. Ретельно підібрані новинки «нічної електроніки», починаючи з дип-хаусу та uk-гареджу, закінчуючи абстрактним хіп-хопом та атмосферною бейс-музикою</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="special спеціальне" data-id="28">
+  <header>
+    <span class="id">#28</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="28" /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Special</h3>
+    </div>
+    <div>
+      <h3 class="new">Спеціальне</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="spisok buivola список «буйвола»" data-id="29">
+  <header>
+    <span class="id">#29</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="29" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Spisok Buivola</h3>
+    </div>
+    <div>
+      <h3 class="new">Список «Буйвола»</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="taking the stage вихід на сцену" data-id="30">
+  <header>
+    <span class="id">#30</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="30" /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Taking the Stage</h3>
+    </div>
+    <div>
+      <h3 class="new">Вихід на сцену</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="the selector селектор" data-id="31">
+  <header>
+    <span class="id">#31</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="31" /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="31" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">The Selector</h3>
+    </div>
+    <div>
+      <h3 class="new">Селектор</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Она не устает доказывать, что аристократическая избирательность британского музыкального вкуса не нуждается в доказательствах</p></div>
+    <div><p class="new">Вона не втомлюється доводити, що аристократична вибагливість британського музичного смаку не потребує доказів</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="twins pick вибір близнюків" data-id="32">
+  <header>
+    <span class="id">#32</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="32" /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Twins Pick</h3>
+    </div>
+    <div>
+      <h3 class="new">Вибір близнюків</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Шоу про кіно TwinsPick! Розмови про прокат, кіноподії, саундтреки, розбір смаків, суб’єктивно про світ кінематографу від сестер Олі та Ані Дацюк.</p></div>
+    <div><p class="new">Шоу про кіно TwinsPick! Розмови про прокат, кіноподії, саундтреки, розбір смаків, суб’єктивно про світ кінематографу від сестер Олі та Ані Дацюк.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="under zauber under zauber" data-id="33">
+  <header>
+    <span class="id">#33</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="33" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">UNDER ZAUBER</h3>
+    </div>
+    <div>
+      <h3 class="new">UNDER ZAUBER</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Katro Zauber каждую среду показывает музыку, которая увлекает.</p></div>
+    <div><p class="new">Katro Zauber щосереди презентує музику, яка захоплює.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="win win talk win win talk" data-id="34">
+  <header>
+    <span class="id">#34</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Win Win Talk</h3>
+    </div>
+    <div>
+      <h3 class="new">Win Win Talk</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="ай лайк ю ай лайк ю" data-id="35">
+  <header>
+    <span class="id">#35</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="35" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Ай Лайк Ю</h3>
+    </div>
+    <div>
+      <h3 class="new">Ай Лайк Ю</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Ежедневно миллиарды людей сидят в соцсетях. Ведущие шоу «Ай лайк Ю» Митя Шельпук и Юрий Марченко бдительно следят за тем, что волнует украинских и мировых пользователей больше всего – и обсуждают это в эфире. Самые резонансные темы Facebook, лучшие посты ВКонтакте и даже легкая экзотика Одноклассников с другими социальными сетями. «Ай лайк Ю» – передача о том, что бьется в сетях.</p></div>
+    <div><p class="new">Щодня мільярди людей проводять час у соцмережах. Ведучі шоу «Ай лайк Ю» Мітя Шельпук та Юрій Марченко пильно стежать за тим, що найбільше хвилює українських та світових користувачів, — і обговорюють це в ефірі. Найрезонансніші теми Facebook, найкращі дописи ВКонтакте і навіть легка екзотика «Однокласників» з іншими соціальними мережами. «Ай лайк Ю» — передача про те, що вирує в мережах.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="андрути андрути" data-id="36">
+  <header>
+    <span class="id">#36</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Андрути</h3>
+    </div>
+    <div>
+      <h3 class="new">Андрути</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Андрути are back. Вирішили, що все ж не можемо пережити рік без Паши Франика і його реп-підбірок. Тим більш, для нашої премії (А)PRIZE не вистачає добротніх реп-релізів. Починаємо серію різдвяних спешелів Андрути - і так чотири раза до кінця року. Щочетверга о 13:00.</p></div>
+    <div><p class="new">Андрути are back. Вирішили, що все ж не можемо пережити рік без Паши Франика і його реп-підбірок. Тим більш, для нашої премії (А)PRIZE не вистачає добротніх реп-релізів. Починаємо серію різдвяних спешелів Андрути - і так чотири раза до кінця року. Щочетверга о 13:00.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="бармен диктат бармен диктат" data-id="37">
+  <header>
+    <span class="id">#37</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="37" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Бармен Диктат</h3>
+    </div>
+    <div>
+      <h3 class="new">Бармен Диктат</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Кирилл Кисляков и Тимур Дорофеев ведут беседы о барной культуре, за стаканчиком чего-нибудь крепкого.</p></div>
+    <div><p class="new">Кирило Кисляков і Тимур Дорофєєв ведуть бесіди про барну культуру, за келихом чогось міцного.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="барселонский дневник primavera sound барселонський щоденник primavera sound" data-id="38">
+  <header>
+    <span class="id">#38</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="38" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Барселонский дневник Primavera Sound</h3>
+    </div>
+    <div>
+      <h3 class="new">Барселонський щоденник Primavera Sound</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="батяні батяні" data-id="39">
+  <header>
+    <span class="id">#39</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Батяні</h3>
+    </div>
+    <div>
+      <h3 class="new">Батяні</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="бездушне електро бездушне електро" data-id="40">
+  <header>
+    <span class="id">#40</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Бездушне Електро</h3>
+    </div>
+    <div>
+      <h3 class="new">Бездушне Електро</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Нестримні танці під бадьорі ритми хаузу, техно і драм-н-бейсу. Годинна музична добірка і порція ранкової мотивації від справжнього поціновувача “годної рвані” - Данили Хомутовського.</p></div>
+    <div><p class="new">Нестримні танці під бадьорі ритми хаузу, техно і драм-н-бейсу. Годинна музична добірка і порція ранкової мотивації від справжнього поціновувача “годної рвані” - Данили Хомутовського.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="белая рубашка біла сорочка" data-id="41">
+  <header>
+    <span class="id">#41</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="41" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Белая Рубашка</h3>
+    </div>
+    <div>
+      <h3 class="new">Біла сорочка</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="большая семья велика родина" data-id="42">
+  <header>
+    <span class="id">#42</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="42" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="42" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Большая семья</h3>
+    </div>
+    <div>
+      <h3 class="new">Велика родина</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Большая Семья – это семейные мифы и легенды, из которых выросли мы настоящие. Это близкие люди, которые окружают нас сегодня и принимают нас такими, какими мы есть. Это мечты и планы на будущее – в кругу Большой Семьи.</p></div>
+    <div><p class="new">«Велика родина» — це сімейні міфи та легенди, з яких виросли ми, справжні. Це близькі люди, які оточують нас сьогодні і приймають нас такими, якими ми є. Це мрії та плани на майбутнє — у колі «Великої родини».</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="большой фисун великий фісун" data-id="43">
+  <header>
+    <span class="id">#43</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="43" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="43" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Большой Фисун</h3>
+    </div>
+    <div>
+      <h3 class="new">Великий Фісун</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Старейшее добрейшее шоу для идеального вечера понедельника. Его автор и ведущий Влад Фисун вместе с интересными гостями создает животворящую музыкальную атмосферу.</p></div>
+    <div><p class="new">Найстаріше й найприємніше шоу для ідеального вечора понеділка. Його автор і ведучий Влад Фісун разом із цікавими гостями створює життєдайну музичну атмосферу.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="братья в хлам брати в хлам" data-id="44">
+  <header>
+    <span class="id">#44</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="44" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Братья в Хлам</h3>
+    </div>
+    <div>
+      <h3 class="new">Брати в Хлам</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="весняні зустрічі з валерією чачибая весняні зустрічі з валерією чачибая" data-id="45">
+  <header>
+    <span class="id">#45</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="45" /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Весняні зустрічі з Валерією Чачибая</h3>
+    </div>
+    <div>
+      <h3 class="new">Весняні зустрічі з Валерією Чачибая</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Интервью с успешными женщинами, которые вдохновляют.</p></div>
+    <div><p class="new">Інтерв’ю з успішними жінками, які надихають.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="вечера классической музыки вечори класичної музики" data-id="46">
+  <header>
+    <span class="id">#46</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="46" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="46" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Вечера классической музыки</h3>
+    </div>
+    <div>
+      <h3 class="new">Вечори класичної музики</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">С гордостью представляет Remy Martin из провинции Коньяк.</p></div>
+    <div><p class="new">З гордістю представляє Remy Martin із провінції Коньяк.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="власники власники" data-id="47">
+  <header>
+    <span class="id">#47</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Власники</h3>
+    </div>
+    <div>
+      <h3 class="new">Власники</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="ворошиловград ворошиловград" data-id="48">
+  <header>
+    <span class="id">#48</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="48" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Ворошиловград</h3>
+    </div>
+    <div>
+      <h3 class="new">Ворошиловград</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Впервые на радио. Книга десятилетия по версии BBC.</p></div>
+    <div><p class="new">Вперше на радіо. Книга десятиліття за версією BBC.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="воскресный папа недільний тато" data-id="49">
+  <header>
+    <span class="id">#49</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="49" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Воскресный папа</h3>
+    </div>
+    <div>
+      <h3 class="new">Недільний тато</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="второе свидание друге побачення" data-id="50">
+  <header>
+    <span class="id">#50</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="50" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Второе свидание</h3>
+    </div>
+    <div>
+      <h3 class="new">Друге побачення</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="выход вихід" data-id="51">
+  <header>
+    <span class="id">#51</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="51" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Выход</h3>
+    </div>
+    <div>
+      <h3 class="new">Вихід</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="гиг гіг" data-id="52">
+  <header>
+    <span class="id">#52</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="52" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Гиг</h3>
+    </div>
+    <div>
+      <h3 class="new">Гіг</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="гири гірі" data-id="53">
+  <header>
+    <span class="id">#53</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="53" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Гири</h3>
+    </div>
+    <div>
+      <h3 class="new">Гірі</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="год за два рік за два" data-id="54">
+  <header>
+    <span class="id">#54</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="54" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="54" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Год за два</h3>
+    </div>
+    <div>
+      <h3 class="new">Рік за два</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Это шоу — о девяностых. Для каждого выпуска мы выбираем главную тему и обсуждаем ее с человеком, которому не плевать. Нас интересуют налоги и секты, рейдерство и поп-чарты, милиция и телевидение, субсидии шахтерам и упадок науки, спортивные победы, свары в парламенте, потребительские кредиты — все, что сделало Украину такой, какая она сейчас. Ведут: экономист Глеб Буряк и журналист Глеб Гусев.</p></div>
+    <div><p class="new">Ця програма — про дев’яності. Для кожного випуску ми обираємо головну тему й обговорюємо її з людиною, якій не байдуже. Нас цікавлять податки й секти, рейдерство й поп-чарти, міліція й телебачення, субсидії шахтарям і занепад науки, спортивні перемоги, сварки в парламенті, споживчі кредити — усе, що зробило Україну такою, якою вона є зараз. Ведуть: економіст Гліб Буряк і журналіст Гліб Гусєв.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="голос(а) голос(а)" data-id="55">
+  <header>
+    <span class="id">#55</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="55" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Голос(А)</h3>
+    </div>
+    <div>
+      <h3 class="new">Голос(А)</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Все говорят. Говорят одновременно. 24/7</p></div>
+    <div><p class="new">Усі говорять. Говорять одночасно. 24/7</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="горизонт событий горизонт подій" data-id="56">
+  <header>
+    <span class="id">#56</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="56" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="56" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Горизонт Событий</h3>
+    </div>
+    <div>
+      <h3 class="new">Горизонт подій</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Самые важные и актуальные новости науки и техники. Разбор научных гипотез и парадигм вместе с экспертами. Энтузиаст от науки Андрей Пелюховский вместе с компетентными резидентами очертит главное, что происходит в этой области сегодня, и попытается заглянуть в будущее.</p></div>
+    <div><p class="new">Найважливіші та найактуальніші новини науки й техніки. Аналіз наукових гіпотез та парадигм разом з експертами. Ентузіаст науки Андрій Пелюховський разом із компетентними резидентами окреслить головне, що відбувається в цій галузі сьогодні, та спробує зазирнути в майбутнє.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="гостевой микс гостьовий мікс" data-id="57">
+  <header>
+    <span class="id">#57</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="57" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Гостевой микс</h3>
+    </div>
+    <div>
+      <h3 class="new">Гостьовий мікс</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="групповой экс груповий екс" data-id="58">
+  <header>
+    <span class="id">#58</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="58" /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="58" /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Групповой Экс</h3>
+    </div>
+    <div>
+      <h3 class="new">Груповий Екс</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Каждому из нас есть что сказать о своих бывших. Скажите это нам. Мы вас услышим.</p></div>
+    <div><p class="new">Кожному з нас є що сказати про своїх колишніх. Розкажіть це нам. Ми вас почуємо.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="дегенераты дегенерати" data-id="59">
+  <header>
+    <span class="id">#59</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="59" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Дегенераты</h3>
+    </div>
+    <div>
+      <h3 class="new">Дегенерати</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="дети детям діти дітям" data-id="60">
+  <header>
+    <span class="id">#60</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="60" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Дети детям</h3>
+    </div>
+    <div>
+      <h3 class="new">Діти дітям</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="дика природа by borjomi дика природа від боржомі" data-id="61">
+  <header>
+    <span class="id">#61</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="61" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Дика природа by Borjomi</h3>
+    </div>
+    <div>
+      <h3 class="new">Дика природа від Боржомі</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="дневники гогольфеста щоденники гогольфесту" data-id="62">
+  <header>
+    <span class="id">#62</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="62" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Дневники Гогольфеста</h3>
+    </div>
+    <div>
+      <h3 class="new">Щоденники Гогольфесту</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="дневники капитана лодыгина щоденники капітана лодигіна" data-id="63">
+  <header>
+    <span class="id">#63</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="63" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Дневники капитана Лодыгина</h3>
+    </div>
+    <div>
+      <h3 class="new">Щоденники капітана Лодигіна</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="дневное шоу денне шоу" data-id="64">
+  <header>
+    <span class="id">#64</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="64" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Дневное Шоу</h3>
+    </div>
+    <div>
+      <h3 class="new">Денне шоу</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="дні джазу дні джазу" data-id="65">
+  <header>
+    <span class="id">#65</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Дні Джазу</h3>
+    </div>
+    <div>
+      <h3 class="new">Дні Джазу</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="доброй ночи и удачи доброї ночі й удачі" data-id="66">
+  <header>
+    <span class="id">#66</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="66" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Доброй Ночи и Удачи</h3>
+    </div>
+    <div>
+      <h3 class="new">Доброї ночі й удачі</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="доктор тина доктор тіна" data-id="67">
+  <header>
+    <span class="id">#67</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="67" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Доктор Тина</h3>
+    </div>
+    <div>
+      <h3 class="new">Доктор Тіна</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="живые чтения живі читання" data-id="68">
+  <header>
+    <span class="id">#68</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="68" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Живые чтения</h3>
+    </div>
+    <div>
+      <h3 class="new">Живі читання</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="завод артема завод артема" data-id="69">
+  <header>
+    <span class="id">#69</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="69" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Завод Артема</h3>
+    </div>
+    <div>
+      <h3 class="new">Завод Артема</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Завод Артема - это территория, на которой я делюсь с вами, дорогие мои слушатели, тем, что нравится мне. Делюсь и прислушиваюсь… Вдруг у кого-то срезонирует, и нас станет больше. И если в первом сезоне я ограничил себя пост-панком, то во втором планирую забраться намного дальше и намного глубже. Ну и кроме музыки будет самая разнообразная литература, читать я тоже очень люблю и всем советую. Как говорится, не оставляйте чтения! А страсть к истории - это вообще отдельная история! Жду всех заинтересовавшихся каждый вторник в виртуальном эфире виртуальной радиостанции.</p></div>
+    <div><p class="new">«Завод Артема» — це простір, де я ділюся з вами, мої дорогі слухачі, тим, що подобається мені. Ділюся і прислухаюся… Раптом у когось це знайде відгук, і нас стане більше. І якщо в першому сезоні я обмежився пост-панком, то в другому планую заглибитися набагато далі й набагато глибше. Ну і крім музики буде найрізноманітніша література — я теж дуже люблю читати й усім раджу. Як то кажуть, не відмовляйтеся від читання! А пристрасть до історії — це взагалі окрема історія! Чекаю на всіх, хто зацікавився, щовівторка у віртуальному ефірі віртуальної радіостанції.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="закрытая тема закрита тема" data-id="70">
+  <header>
+    <span class="id">#70</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="70" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="70" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Закрытая Тема</h3>
+    </div>
+    <div>
+      <h3 class="new">Закрита тема</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">#ЗакрытаяТема — программа, в которой известная журналистка Юлия Рукавицина со своими авторитетными собеседниками затрагивает темы, которые по обыкновению мы стараемся не поднимать, избегаем как неудобные или наоборот привычные и давно понятные.</p></div>
+    <div><p class="new">#ЗакритаТема — програма, в якій відома журналістка Юлія Рукавіцина разом зі своїми авторитетними співрозмовниками порушує теми, які зазвичай ми намагаємося не піднімати, уникаємо як незручні або, навпаки, звичні й давно зрозумілі.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="зміст всередині зміст всередині" data-id="71">
+  <header>
+    <span class="id">#71</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Зміст всередині</h3>
+    </div>
+    <div>
+      <h3 class="new">Зміст всередині</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="индекс хирша індекс хірша" data-id="72">
+  <header>
+    <span class="id">#72</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="72" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="72" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Индекс Хирша</h3>
+    </div>
+    <div>
+      <h3 class="new">Індекс Хірша</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Журналистка и поэтесса Мириам Драгина встречается с выдающимися профессионалами, для которых их работа - смысл жизни.</p></div>
+    <div><p class="new">Журналістка та поетеса Міріам Драгіна зустрічається з видатними професіоналами, для яких їхня робота — сенс життя.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="искусственный интеллект штучний інтелект" data-id="73">
+  <header>
+    <span class="id">#73</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="73" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Искусственный интеллект</h3>
+    </div>
+    <div>
+      <h3 class="new">Штучний інтелект</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="інтернаціонал інтернаціонал" data-id="74">
+  <header>
+    <span class="id">#74</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Інтернаціонал</h3>
+    </div>
+    <div>
+      <h3 class="new">Інтернаціонал</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Гарячі міжнародні теми в авторській подачі, спілкування з широким колом міжнародних політиків, журналістів, митців. Музика з усього світу</p></div>
+    <div><p class="new">Гарячі міжнародні теми в авторській подачі, спілкування з широким колом міжнародних політиків, журналістів, митців. Музика з усього світу</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="как быть як бути" data-id="75">
+  <header>
+    <span class="id">#75</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="75" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="75" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Как быть</h3>
+    </div>
+    <div>
+      <h3 class="new">Як бути</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Давайте признаем: нет ничего неловкого в том, что вы не знаете как быть!
+Мы поможем [email protected]</p></div>
+    <div><p class="new">Давайте визнаємо: немає нічого незручного в тому, що ви не знаєте, як вчинити!
+Ми допоможемо</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="камон, плэй! камон, плей!" data-id="76">
+  <header>
+    <span class="id">#76</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="76" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="76" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Камон, плэй!</h3>
+    </div>
+    <div>
+      <h3 class="new">Камон, плей!</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Футбольные журналисты каждый вторник обсуждают главные события в мире спорта номер один с гостями и слушателями. Единственное независимое ток-шоу о футболе.</p></div>
+    <div><p class="new">Футбольні журналісти щовівторка обговорюють головні події у світі спорту номер один із гостями та слухачами. Єдине незалежне ток-шоу про футбол.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="карта в лето карта в літо" data-id="77">
+  <header>
+    <span class="id">#77</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="77" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="77" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Карта в лето</h3>
+    </div>
+    <div>
+      <h3 class="new">Карта в літо</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Внимание: настоящий эксперимент! Все, что нужно путешественнику и меломану Алла Кошляк приобретает при помощи специальных часов. Мир без наличных вместе с Master Card.</p></div>
+    <div><p class="new">Увага: це експеримент! Усе, що потрібно мандрівникові та меломану, Алла Кошляк купує за допомогою спеціального годинника. Світ без готівки разом із Master Card.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="классика класика" data-id="78">
+  <header>
+    <span class="id">#78</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="78" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="78" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Классика</h3>
+    </div>
+    <div>
+      <h3 class="new">Класика</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Программа об академической музыке. Ведущие - профессор Юрий Зильберман и музыковед Иванка Карабиц. Это восхитительная #КлассикаНаАристократах</p></div>
+    <div><p class="new">Програма про академічну музику. Ведучі — професор Юрій Зільберман та музикознавець Іванка Карабиць. Це чудова #КласикаНаАристократах</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="клуб благородных певиц клуб благородних співачок" data-id="79">
+  <header>
+    <span class="id">#79</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="79" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Клуб благородных певиц</h3>
+    </div>
+    <div>
+      <h3 class="new">Клуб благородних співачок</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="клуб парето клуб парето" data-id="80">
+  <header>
+    <span class="id">#80</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="80" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Клуб Парето</h3>
+    </div>
+    <div>
+      <h3 class="new">Клуб Парето</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Принципом Парето принято называть соотношение 80 на 20.
+20% из нас создает 80% благосостояния.</p></div>
+    <div><p class="new">Принципом Парето прийнято називати співвідношення 80 до 20.
+20% з нас створюють 80% добробуту.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="клуб эрнеста хемингуэя клуб ернеста гемінґвея" data-id="81">
+  <header>
+    <span class="id">#81</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="81" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="81" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Клуб Эрнеста Хемингуэя</h3>
+    </div>
+    <div>
+      <h3 class="new">Клуб Ернеста Гемінґвея</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Радиобар. Когда за барной стойкой, перебрав, засыпает великий писатель, успевая сказать только одну фразу, трое мужчин остаются обсуждать ее и все, что придет им в голову. О женщинах, войне и ружьях, литературе и музыке, политике и астрономии - настоящий мужской клуб с первоклассной музыкой</p></div>
+    <div><p class="new">«Радіобар». Коли за барною стійкою, перебравши, засинає великий письменник, встигнувши сказати лише одну фразу, троє чоловіків залишаються обговорювати її та все, що спаде їм на думку. Про жінок, війну та зброю, літературу та музику, політику та астрономію — справжній чоловічий клуб із першокласною музикою</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="книжное сословие книжкове сословіє" data-id="82">
+  <header>
+    <span class="id">#82</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="82" /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="82" /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Книжное Сословие</h3>
+    </div>
+    <div>
+      <h3 class="new">Книжкове сословіє</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">«Книжное сословие» – это литературные события, обзоры новинок, рецензии на лучшие произведения. У микрофона профессиональный читатель Юрий Володарский.</p></div>
+    <div><p class="new">«Книжкове сословіє» — це літературні події, огляди новинок, рецензії на найкращі твори. За мікрофоном — професійний читач Юрій Володарський.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="конструктор конструктор" data-id="83">
+  <header>
+    <span class="id">#83</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Конструктор</h3>
+    </div>
+    <div>
+      <h3 class="new">Конструктор</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="котики котики" data-id="84">
+  <header>
+    <span class="id">#84</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Котики</h3>
+    </div>
+    <div>
+      <h3 class="new">Котики</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="кошмарченко кошмарченко" data-id="85">
+  <header>
+    <span class="id">#85</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="85" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Кошмарченко</h3>
+    </div>
+    <div>
+      <h3 class="new">Кошмарченко</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Главред platfor.ma Юрий Марченко встречается с интересными людьми, чтобы вспомнить те моменты жизни, которые хочется забыть.</p></div>
+    <div><p class="new">Головний редактор platfor.ma Юрій Марченко зустрічається з цікавими людьми, щоб згадати ті моменти життя, які хочеться забути.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="круглий стіл круглий стіл" data-id="86">
+  <header>
+    <span class="id">#86</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Круглий стіл</h3>
+    </div>
+    <div>
+      <h3 class="new">Круглий стіл</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="крутознавство крутознавство" data-id="87">
+  <header>
+    <span class="id">#87</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Крутознавство</h3>
+    </div>
+    <div>
+      <h3 class="new">Крутознавство</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Спільний проект з Discovery Channel.
+Уроки офігізму веде Влад Волочай.
+Дайджест найкрутіших новин про те, що знати дійсно круто.
+Це щоденник персональних досліджень всього, що не залишає байдужим та викликає бажання сказати «Вау! Круто!».
+Ціль крутознавства — розповсюдження знань у вільній формі заради спільного розвитку суспільства.</p></div>
+    <div><p class="new">Спільний проект з Discovery Channel.
+Уроки офігізму веде Влад Волочай.
+Дайджест найкрутіших новин про те, що знати дійсно круто.
+Це щоденник персональних досліджень всього, що не залишає байдужим та викликає бажання сказати «Вау! Круто!».
+Ціль крутознавства — розповсюдження знань у вільній формі заради спільного розвитку суспільства.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="культурний проект культурний проект" data-id="88">
+  <header>
+    <span class="id">#88</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Культурний Проект</h3>
+    </div>
+    <div>
+      <h3 class="new">Культурний Проект</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Цикл радіолекцій з літератури, історії та філософії в партнерстві з Культурним Проектом</p></div>
+    <div><p class="new">Цикл радіолекцій з літератури, історії та філософії в партнерстві з Культурним Проектом</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="культурный цех кошмана культурний цех кошмана" data-id="89">
+  <header>
+    <span class="id">#89</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="89" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="89" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Культурный цех Кошмана</h3>
+    </div>
+    <div>
+      <h3 class="new">Культурний цех Кошмана</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Время конструировать будущее. Каждая деталь важна. Думаем вместе, по щепотке собираем лучшее. По совету от лучших, по мысли от мудрейших. Цех ремесленников нового времени выплавляет новые идеи и представления.</p></div>
+    <div><p class="new">Час будувати майбутнє. Кожна деталь має значення. Ми думаємо разом, потроху збираємо найкраще. За порадою найкращих, за думкою наймудріших. Цех ремісників нового часу виплавляє нові ідеї та уявлення.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="легендарные речи легендарні промови" data-id="90">
+  <header>
+    <span class="id">#90</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="90" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Легендарные Речи</h3>
+    </div>
+    <div>
+      <h3 class="new">Легендарні промови</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="лекції та майстер-класи лекції та майстер-класи" data-id="91">
+  <header>
+    <span class="id">#91</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Лекції та майстер-класи</h3>
+    </div>
+    <div>
+      <h3 class="new">Лекції та майстер-класи</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="лєра чачибая лєра чачибая" data-id="92">
+  <header>
+    <span class="id">#92</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Лєра Чачибая</h3>
+    </div>
+    <div>
+      <h3 class="new">Лєра Чачибая</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="літо для себе літо для себе" data-id="93">
+  <header>
+    <span class="id">#93</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Літо для себе</h3>
+    </div>
+    <div>
+      <h3 class="new">Літо для себе</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="лоллипоп лоліпоп" data-id="94">
+  <header>
+    <span class="id">#94</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="94" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Лоллипоп</h3>
+    </div>
+    <div>
+      <h3 class="new">Лоліпоп</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="маніякпосереднас маніякпосереднас" data-id="95">
+  <header>
+    <span class="id">#95</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">МаніякПосередНас</h3>
+    </div>
+    <div>
+      <h3 class="new">МаніякПосередНас</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="меланж меланж" data-id="96">
+  <header>
+    <span class="id">#96</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Меланж</h3>
+    </div>
+    <div>
+      <h3 class="new">Меланж</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Программа про музику світу. Розповідаємо про артистів, що змінюють наше уявлення жанрів, що долають кордони стилів, змішуючи джаз, етно, електроніку</p></div>
+    <div><p class="new">Программа про музику світу. Розповідаємо про артистів, що змінюють наше уявлення жанрів, що долають кордони стилів, змішуючи джаз, етно, електроніку</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="мистецтво під ключ мистецтво під ключ" data-id="97">
+  <header>
+    <span class="id">#97</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Мистецтво під ключ</h3>
+    </div>
+    <div>
+      <h3 class="new">Мистецтво під ключ</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="місяць великого кіно з mastercard місяць великого кіно з mastercard" data-id="98">
+  <header>
+    <span class="id">#98</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Місяць великого кіно з MasterCard</h3>
+    </div>
+    <div>
+      <h3 class="new">Місяць великого кіно з MasterCard</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Ефект присутності – гарантований! Найкращі знавці кіно, фахові розбори та захоплюючі розмови й прогнози, вболівання за українських учасників та прямі включення з епіцентру подій.</p></div>
+    <div><p class="new">Ефект присутності – гарантований! Найкращі знавці кіно, фахові розбори та захоплюючі розмови й прогнози, вболівання за українських учасників та прямі включення з епіцентру подій.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="много воды багато води" data-id="99">
+  <header>
+    <span class="id">#99</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="99" /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Много Воды</h3>
+    </div>
+    <div>
+      <h3 class="new">Багато води</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="моя пташечка by auchan моя пташечка by auchan" data-id="100">
+  <header>
+    <span class="id">#100</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Моя пташечка by Auchan</h3>
+    </div>
+    <div>
+      <h3 class="new">Моя пташечка by Auchan</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="музыка даши коломиец музика даші коломієць" data-id="101">
+  <header>
+    <span class="id">#101</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="101" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="101" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Музыка Даши Коломиец</h3>
+    </div>
+    <div>
+      <h3 class="new">Музика Даші Коломієць</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Драйвовая звезда киевских танцполов, путешественница и телеведущая Даша Коломиец делает из утра понедельника самый бодрящий момент недели! Музыка, которая вызывает мурашки!</p></div>
+    <div><p class="new">Енергійна зірка київських танцмайданчиків, мандрівниця та телеведуча Даша Коломієць перетворює ранок понеділка на найбадьоріший момент тижня! Музика, від якої мурашки по шкірі!</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="мягкая комната м’яка кімната" data-id="102">
+  <header>
+    <span class="id">#102</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="102" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="102" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Мягкая Комната</h3>
+    </div>
+    <div>
+      <h3 class="new">М’яка кімната</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Программа “душеведа, мозголаза и просто человека-бальзама на душу”. Поговорим о психическом здоровье.</p></div>
+    <div><p class="new">Програма «душеведа, мозголаза і просто людини-бальзаму для душі». Поговоримо про психічне здоров’я.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="на игле на голці" data-id="103">
+  <header>
+    <span class="id">#103</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="103" /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="103" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">На игле</h3>
+    </div>
+    <div>
+      <h3 class="new">На голці</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Известные аудиофилы и винилоньяки проигрывают для вас новую пластинку, прохаживаясь по ней иглой от первого до последнего трека.</p></div>
+    <div><p class="new">Відомі аудіофіли та вініломани програють для вас нову платівку, проходячи по ній голкою від першого до останнього треку.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="не за баром не за баром" data-id="104">
+  <header>
+    <span class="id">#104</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="104" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Не за баром</h3>
+    </div>
+    <div>
+      <h3 class="new">Не за баром</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Иногда - хочется просто выпить и поболтать. Каждую среду, в полночь, вместе с гостями шоу “Не за баром” мы будем умеренно выпивать и безудержно общаться.</p></div>
+    <div><p class="new">Іноді — хочеться просто випити й поговорити. Щосереди, опівночі, разом із гостями шоу «Не за баром» ми будемо помірковано випивати й нестримно спілкуватися.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="непам’ятники непам’ятники" data-id="105">
+  <header>
+    <span class="id">#105</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Непам’ятники</h3>
+    </div>
+    <div>
+      <h3 class="new">Непам’ятники</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="нова музика нова музика" data-id="106">
+  <header>
+    <span class="id">#106</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Нова Музика</h3>
+    </div>
+    <div>
+      <h3 class="new">Нова Музика</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="новая любовь маринича и кати нове кохання маринича та каті" data-id="107">
+  <header>
+    <span class="id">#107</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="107" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Новая любовь Маринича и Кати</h3>
+    </div>
+    <div>
+      <h3 class="new">Нове кохання Маринича та Каті</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="обратная сторона ветра зворотний бік вітру" data-id="108">
+  <header>
+    <span class="id">#108</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="108" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Обратная сторона ветра</h3>
+    </div>
+    <div>
+      <h3 class="new">Зворотний бік вітру</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="особый эфир спеціальний ефір" data-id="109">
+  <header>
+    <span class="id">#109</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="109" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Особый эфир</h3>
+    </div>
+    <div>
+      <h3 class="new">Спеціальний ефір</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="перше шоу на аристократах перше шоу на аристократах" data-id="110">
+  <header>
+    <span class="id">#110</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Перше Шоу на Аристократах</h3>
+    </div>
+    <div>
+      <h3 class="new">Перше Шоу на Аристократах</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="плейлист плейлист" data-id="111">
+  <header>
+    <span class="id">#111</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Плейлист</h3>
+    </div>
+    <div>
+      <h3 class="new">Плейлист</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="погружение занурення" data-id="112">
+  <header>
+    <span class="id">#112</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="112" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="112" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Погружение</h3>
+    </div>
+    <div>
+      <h3 class="new">Занурення</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">#Погружение — это своеобразный диалог человека со временем. Гости программы поднимают глубинные и лежащие на поверхности вопросы о мире и человеческой жизни. Разговор с теми, кто нашел, для тех, кто ищет.</p></div>
+    <div><p class="new">#«Занурення» — це своєрідний діалог людини з часом. Гості програми порушують глибинні та поверхневі питання про світ і людське життя. Розмова з тими, хто знайшов, для тих, хто шукає.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="поп-агент поп-агент" data-id="113">
+  <header>
+    <span class="id">#113</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="113" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Поп-агент</h3>
+    </div>
+    <div>
+      <h3 class="new">Поп-агент</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Владимир Сиваш, знаменитый музыкальный обозреватель, играет самую правильную музыку момента.</p></div>
+    <div><p class="new">Володимир Сиваш, відомий музичний оглядач, грає найактуальнішу музику сьогодення.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="праздная жизнь безтурботне життя" data-id="114">
+  <header>
+    <span class="id">#114</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="114" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="114" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Праздная жизнь</h3>
+    </div>
+    <div>
+      <h3 class="new">Безтурботне життя</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Как развлечься приличному человеку. Афиша главных событий Киева, Украины и мира с иллюстрациями.</p></div>
+    <div><p class="new">Як розважитися пристойній людині. Афіша головних подій Києва, України та світу з ілюстраціями.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="презентація презентація" data-id="115">
+  <header>
+    <span class="id">#115</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Презентація</h3>
+    </div>
+    <div>
+      <h3 class="new">Презентація</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="путешествия подорожі" data-id="116">
+  <header>
+    <span class="id">#116</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="116" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Путешествия</h3>
+    </div>
+    <div>
+      <h3 class="new">Подорожі</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="радиоконцерт радіоконцерт" data-id="117">
+  <header>
+    <span class="id">#117</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="117" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Радиоконцерт</h3>
+    </div>
+    <div>
+      <h3 class="new">Радіоконцерт</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="радіо mba радіо mba" data-id="118">
+  <header>
+    <span class="id">#118</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Радіо MBA</h3>
+    </div>
+    <div>
+      <h3 class="new">Радіо MBA</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Розумний бізнес із повагою до себе. Запустити власну справу дуже просто, але складно утримати її на плаву, зробити прибутковою і стабільною на багато років. Окрім щоденної мотивації, потрібні знання, як налагоджувати і вдосконалювати процеси. Можна отримати ці знання в бізнес-школі, а можна самостійно - онлайн у нашій програмі «Радіо MBA» із Даниїлом Ваховським.</p></div>
+    <div><p class="new">Розумний бізнес із повагою до себе. Запустити власну справу дуже просто, але складно утримати її на плаву, зробити прибутковою і стабільною на багато років. Окрім щоденної мотивації, потрібні знання, як налагоджувати і вдосконалювати процеси. Можна отримати ці знання в бізнес-школі, а можна самостійно - онлайн у нашій програмі «Радіо MBA» із Даниїлом Ваховським.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="радіоконцерт лауреатів хii міжнародного конкурсу молодих піаністів пам'яті володимира горовиця радіоконцерт лауреатів хii міжнародного конкурсу молодих піаністів пам'яті володимира горовиця" data-id="119">
+  <header>
+    <span class="id">#119</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Радіоконцерт лауреатів ХII Міжнародного конкурсу молодих піаністів пам'яті Володимира Горовиця</h3>
+    </div>
+    <div>
+      <h3 class="new">Радіоконцерт лауреатів ХII Міжнародного конкурсу молодих піаністів пам'яті Володимира Горовиця</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="ранкова порка ранкова порка" data-id="120">
+  <header>
+    <span class="id">#120</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Ранкова Порка</h3>
+    </div>
+    <div>
+      <h3 class="new">Ранкова Порка</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Новий сезон постійної рубрики Ранкового Шоу. Ескпертний погляд Валерії Чачибая, Ігоря Тарнопольського та Дениса Козловського на творчість молодих українських музикантів.</p></div>
+    <div><p class="new">Новий сезон постійної рубрики Ранкового Шоу. Ескпертний погляд Валерії Чачибая, Ігоря Тарнопольського та Дениса Козловського на творчість молодих українських музикантів.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="ранкове шоу ранкове шоу" data-id="121">
+  <header>
+    <span class="id">#121</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="121" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Ранкове Шоу</h3>
+    </div>
+    <div>
+      <h3 class="new">Ранкове Шоу</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Легендарное шоу, которое выходит в эфир по будням со вторника по пятницу в 10:00. Основатели “Аристократов” Лера Чачибая, Ярослав Лодыгин и Данила Хомутовский встречаются в студии, чтобы посмеяться, обсудить главные новости, поговорить со слушателями и самыми интересными людьми. Музыка, живые выступления, презентации альбомов.</p></div>
+    <div><p class="new">Легендарне шоу, яке виходить в ефір у будні з вівторка по п’ятницю о 10:00. Засновники «Аристократів» Лера Чачібая, Ярослав Лодигін та Данило Хомутовський зустрічаються у студії, щоб посміятися, обговорити головні новини, поспілкуватися зі слухачами та найцікавішими людьми. Музика, живі виступи, презентації альбомів.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="ранок з аристократами ранок з аристократами" data-id="122">
+  <header>
+    <span class="id">#122</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="122" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Ранок з Аристократами</h3>
+    </div>
+    <div>
+      <h3 class="new">Ранок з Аристократами</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Легендарное шоу, которое выходит в эфир по будням со вторника по пятницу в 10:00. Основатели “Аристократов” Лера Чачибая, Ярослав Лодыгин и Данила Хомутовский встречаются в студии, чтобы посмеяться, обсудить главные новости, поговорить со слушателями и самыми интересными людьми. Музыка, живые выступления, презентации альбомов.</p></div>
+    <div><p class="new">Легендарна програма, яка виходить в ефір у будні з вівторка по п’ятницю о 10:00. Засновники «Аристократів» Лера Чачібая, Ярослав Лодигін та Данило Хомутовський зустрічаються у студії, щоб посміятися, обговорити головні новини, поспілкуватися зі слухачами та найцікавішими людьми. Музика, живі виступи, презентації альбомів.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="ранок на війні ранок на війні" data-id="123">
+  <header>
+    <span class="id">#123</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Ранок на війні</h3>
+    </div>
+    <div>
+      <h3 class="new">Ранок на війні</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="реалісти реалісти" data-id="124">
+  <header>
+    <span class="id">#124</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Реалісти</h3>
+    </div>
+    <div>
+      <h3 class="new">Реалісти</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="різдвяні історії артема вільбіка різдвяні історії артема вільбіка" data-id="125">
+  <header>
+    <span class="id">#125</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Різдвяні історії Артема Вільбіка</h3>
+    </div>
+    <div>
+      <h3 class="new">Різдвяні історії Артема Вільбіка</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="санден санден" data-id="126">
+  <header>
+    <span class="id">#126</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="126" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Санден</h3>
+    </div>
+    <div>
+      <h3 class="new">Санден</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Старый знакомый или случайный собеседник, встреча с которым может перерасти в дружбу или остаться приятным воспоминанием. Анна Санден приглашает в студию на разговор без обязательств.</p></div>
+    <div><p class="new">Старий знайомий чи випадковий співрозмовник, зустріч із яким може перерости у дружбу або залишитися приємним спогадом. Анна Санден запрошує до студії на розмову без зобов’язань.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="свинья и гильза свиня та гільза" data-id="127">
+  <header>
+    <span class="id">#127</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="127" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Свинья и Гильза</h3>
+    </div>
+    <div>
+      <h3 class="new">Свиня та Гільза</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="святковий сезон на аристократах святковий сезон на аристократах" data-id="128">
+  <header>
+    <span class="id">#128</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Святковий Сезон на Аристократах</h3>
+    </div>
+    <div>
+      <h3 class="new">Святковий Сезон на Аристократах</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="сиваш дает послушать сиваш дає послухати" data-id="129">
+  <header>
+    <span class="id">#129</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="129" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="129" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Сиваш дает послушать</h3>
+    </div>
+    <div>
+      <h3 class="new">Сиваш дає послухати</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Тонкий музыкальный взгляд на хорошую музыку в еженедельной подборке популярного журналиста, критика и диджея</p></div>
+    <div><p class="new">Тонкий музичний погляд на гарну музику у щотижневій добірці популярного журналіста, критика та діджея</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="сильна фігура сильна фігура" data-id="130">
+  <header>
+    <span class="id">#130</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Сильна Фігура</h3>
+    </div>
+    <div>
+      <h3 class="new">Сильна Фігура</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">“Сильна Фігура” - спільний проект Visa та Радіо Аристократи. Дві особистості, одна гра, edutainment &amp; hard talk у часових рамках однієї партії в шахи.</p></div>
+    <div><p class="new">“Сильна Фігура” - спільний проект Visa та Радіо Аристократи. Дві особистості, одна гра, edutainment &amp; hard talk у часових рамках однієї партії в шахи.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="сказки народов мира казки народів світу" data-id="131">
+  <header>
+    <span class="id">#131</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="131" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Сказки Народов Мира</h3>
+    </div>
+    <div>
+      <h3 class="new">Казки народів світу</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="слуховые аппараты слухові апарати" data-id="132">
+  <header>
+    <span class="id">#132</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="132" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="132" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Слуховые аппараты</h3>
+    </div>
+    <div>
+      <h3 class="new">Слухові апарати</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Музыканты говорят о музыке. Изучают, анализирую и препарируют вслух. Готовят музыку в прямом эфире</p></div>
+    <div><p class="new">Музиканти розмовляють про музику. Досліджують, аналізують і розбирають її вголос. Готують музику в прямому ефірі</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="спеціальний ефір спеціальний ефір" data-id="133">
+  <header>
+    <span class="id">#133</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Спеціальний ефір</h3>
+    </div>
+    <div>
+      <h3 class="new">Спеціальний ефір</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="список буйвола список буйвола" data-id="134">
+  <header>
+    <span class="id">#134</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="134" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Список Буйвола</h3>
+    </div>
+    <div>
+      <h3 class="new">Список Буйвола</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Пару дней назад я написал в соцсетях, что больше не буду выступать как диджей на публичных мероприятиях. Это сложное, но невероятно важное для меня решение. В какой то момент я понял, что хобби перестало приносить удовольствие. #СписокБуйвола – это сплошное удовольствие. Это мой собственный язык общения с миром. С людьми от Жашкова до Сиднея.</p></div>
+    <div><p class="new">Кілька днів тому я написав у соцмережах, що більше не виступатиму як діджей на публічних заходах. Це складне, але надзвичайно важливе для мене рішення. У якийсь момент я зрозумів, що хобі перестало приносити задоволення. #СписокБуйвола — це суцільне задоволення. Це моя власна мова спілкування зі світом. З людьми від Жашкова до Сіднея.</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="томная ночь млосна ніч" data-id="135">
+  <header>
+    <span class="id">#135</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="135" /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="135" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Томная ночь</h3>
+    </div>
+    <div>
+      <h3 class="new">Млосна ніч</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Томная программа с музыкой и телефонными беседами для тех, кто не спит.</p></div>
+    <div><p class="new">Мрійлива програма з музикою та телефонними розмовами для тих, хто не спить.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="тренди-бренди тренди-бренди" data-id="136">
+  <header>
+    <span class="id">#136</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Тренди-Бренди</h3>
+    </div>
+    <div>
+      <h3 class="new">Тренди-Бренди</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="українське життя українське життя" data-id="137">
+  <header>
+    <span class="id">#137</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Українське життя</h3>
+    </div>
+    <div>
+      <h3 class="new">Українське життя</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Аудіопонарома модерної країни. Подкаст про голоси, звуки і події, від яких заряджаєшся енергією продовжувати свою справу!</p></div>
+    <div><p class="new">Аудіопонарома модерної країни. Подкаст про голоси, звуки і події, від яких заряджаєшся енергією продовжувати свою справу!</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="український креативний фонд український креативний фонд" data-id="138">
+  <header>
+    <span class="id">#138</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Український Креативний Фонд</h3>
+    </div>
+    <div>
+      <h3 class="new">Український Креативний Фонд</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="университет культурного проекта університет культурного проекту" data-id="139">
+  <header>
+    <span class="id">#139</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="139" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="139" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Университет Культурного Проекта</h3>
+    </div>
+    <div>
+      <h3 class="new">Університет Культурного Проекту</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Лекции и диалоги, комментарии и обсуждение актуальных тем. Тарас Лютый, Ольга Балашова, Ростислав Семкив, Виталий Вышинский и другие эксперты попытаются ответить на вопрос: зачем нам сегодня знания о высоком?</p></div>
+    <div><p class="new">Лекції та діалоги, коментарі та обговорення актуальних тем. Тарас Лютий, Ольга Балашова, Ростислав Семків, Віталій Вишинський та інші експерти спробують відповісти на запитання: навіщо нам сьогодні знання про високе?</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="франкофилия франкофілія" data-id="140">
+  <header>
+    <span class="id">#140</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="140" /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="140" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Франкофилия</h3>
+    </div>
+    <div>
+      <h3 class="new">Франкофілія</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Авторские подкасты Николая Макеева , в которых собрана французская музыка всех времён и направлений</p></div>
+    <div><p class="new">Авторські подкасти Миколи Макеєва, у яких зібрано французьку музику всіх часів і напрямків</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="фролова на тарасовской фролова на тарасівській" data-id="141">
+  <header>
+    <span class="id">#141</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="141" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="141" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Фролова на Тарасовской</h3>
+    </div>
+    <div>
+      <h3 class="new">Фролова на Тарасівській</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Красавица Вася Фролова и редактор Esquire Алексей Тарасов находятся в перманентном диспуте с музыкальными паузами</p></div>
+    <div><p class="new">Красуня Вася Фролова та редактор Esquire Олексій Тарасов перебувають у постійній суперечці з музичними паузами</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="цивилизация цивілізація" data-id="142">
+  <header>
+    <span class="id">#142</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="142" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="142" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Цивилизация</h3>
+    </div>
+    <div>
+      <h3 class="new">Цивілізація</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">В новом сезоне мы продолжим искать в прямом эфире небанальные ответы на глобальные вопросы. Перед угрозой надвигающегося варварства.</p></div>
+    <div><p class="new">У новому сезоні ми продовжимо шукати в прямому ефірі небанальні відповіді на глобальні питання. Перед загрозою варварства, що насувається.</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="цивілізація івана яковини цивілізація івана яковини" data-id="143">
+  <header>
+    <span class="id">#143</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Цивілізація Івана Яковини</h3>
+    </div>
+    <div>
+      <h3 class="new">Цивілізація Івана Яковини</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="шкільна дискотека шкільна дискотека" data-id="144">
+  <header>
+    <span class="id">#144</span>
+    <span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="desc" data-id="144" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Шкільна Дискотека</h3>
+    </div>
+    <div>
+      <h3 class="new">Шкільна Дискотека</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Микстейп для тех, кто любит тряхнуть стариной</p></div>
+    <div><p class="new">Мікстейп для тих, хто любить поринути в минуле</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="шоу мириам драгиной шоу міріам драгіної" data-id="145">
+  <header>
+    <span class="id">#145</span>
+    <span class="tag tag-name">назва</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="145" checked /> перекласти назву</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Шоу Мириам Драгиной</h3>
+    </div>
+    <div>
+      <h3 class="new">Шоу Міріам Драгіної</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="щоденники.leopolis jazz fest щоденники.leopolis jazz fest" data-id="146">
+  <header>
+    <span class="id">#146</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Щоденники.Leopolis Jazz Fest</h3>
+    </div>
+    <div>
+      <h3 class="new">Щоденники.Leopolis Jazz Fest</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+<article class="card changed" data-q="этот вечер с алексеем мариничем цей вечір з олексієм мариничем" data-id="147">
+  <header>
+    <span class="id">#147</span>
+    <span class="tag tag-name">назва</span><span class="tag tag-desc">опис</span>
+    <span class="picks"><label class="pick"><input type="checkbox" data-field="name" data-id="147" checked /> перекласти назву</label><label class="pick"><input type="checkbox" data-field="desc" data-id="147" checked /> перекласти опис</label></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Этот вечер с Алексеем Мариничем</h3>
+    </div>
+    <div>
+      <h3 class="new">Цей вечір з Олексієм Мариничем</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="old">Иногда очень хочется побыть одному, но чтобы рядом непременно кто-нибудь был. Музыкальные грезы одиноких сердец</p></div>
+    <div><p class="new">Іноді дуже хочеться побути наодинці, але щоб поруч обов’язково хтось був. Музичні мрії самотніх сердець</p></div>
+  </div>
+</article>
+<article class="card unchanged" data-q="я ок, наскільки це можливо я ок, наскільки це можливо" data-id="148">
+  <header>
+    <span class="id">#148</span>
+    <span class="tag tag-same">без змін</span>
+    <span class="picks"></span>
+  </header>
+  <div class="pair names">
+    <div>
+      <h3 class="old">Я ок, наскільки це можливо</h3>
+    </div>
+    <div>
+      <h3 class="new">Я ок, наскільки це можливо</h3>
+    </div>
+  </div>
+  <div class="pair">
+    <div><p class="missing">немає опису</p></div>
+    <div><p class="missing">немає опису</p></div>
+  </div>
+</article>
+  </main>
+  <div class="bar">
+    <button type="button" id="allNames">Усі назви</button>
+    <button type="button" id="allDescs">Усі описи</button>
+    <button type="button" id="none">Нічого</button>
+    <button type="button" class="primary" id="copy">Копіювати вибір</button>
+    <span class="sum" id="summary"></span>
+  </div>
+  <script>
+    const STORAGE = 'aristocrats-show-translation-picks'
+    const q = document.getElementById('q')
+    const only = document.getElementById('onlyChanged')
+    const cards = [...document.querySelectorAll('.card')]
+    const boxes = [...document.querySelectorAll('input[data-field]')]
+    const summary = document.getElementById('summary')
+
+    function selection() {
+      return {
+        renameNames: boxes.filter((b) => b.dataset.field === 'name' && b.checked).map((b) => Number(b.dataset.id)),
+        renameDescs: boxes.filter((b) => b.dataset.field === 'desc' && b.checked).map((b) => Number(b.dataset.id)),
+      }
+    }
+
+    function paint() {
+      document.body.classList.toggle('filter-changed', only.checked)
+      const needle = q.value.trim().toLowerCase()
+      for (const card of cards) {
+        const hideSearch = needle && !card.dataset.q.includes(needle)
+        card.hidden = hideSearch
+        const on = [...card.querySelectorAll('input[data-field]')].some((b) => b.checked)
+        card.classList.toggle('on', on)
+      }
+      const s = selection()
+      summary.textContent = 'Перекласти ' + s.renameNames.length + ' назв і ' + s.renameDescs.length + ' описів'
+      localStorage.setItem(STORAGE, JSON.stringify(s))
+    }
+
+    try {
+      const saved = JSON.parse(localStorage.getItem(STORAGE) || 'null')
+      if (saved) {
+        const names = new Set(saved.renameNames || [])
+        const descs = new Set(saved.renameDescs || [])
+        for (const box of boxes) {
+          box.checked = box.dataset.field === 'name'
+            ? names.has(Number(box.dataset.id))
+            : descs.has(Number(box.dataset.id))
+        }
+      }
+    } catch {}
+
+    q.addEventListener('input', paint)
+    only.addEventListener('change', paint)
+    for (const box of boxes) box.addEventListener('change', paint)
+
+    document.getElementById('allNames').onclick = () => {
+      for (const box of boxes) if (box.dataset.field === 'name') box.checked = true
+      paint()
+    }
+    document.getElementById('allDescs').onclick = () => {
+      for (const box of boxes) if (box.dataset.field === 'desc') box.checked = true
+      paint()
+    }
+    document.getElementById('none').onclick = () => {
+      for (const box of boxes) box.checked = false
+      paint()
+    }
+    document.getElementById('copy').onclick = async () => {
+      const text = JSON.stringify(selection(), null, 2)
+      await navigator.clipboard.writeText(text)
+      summary.textContent = 'Скопійовано. Вставте JSON у чат — застосую вибір.'
+    }
+
+    paint()
+  </script>
+</body>
+</html>
