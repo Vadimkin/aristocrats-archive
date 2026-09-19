@@ -2,6 +2,7 @@ import { store } from '../state/storage.js'
 import { toggleDone, metaFor } from '../state/listening.js'
 import { current as playingItem, playing } from '../state/player.js'
 import { duration as fmtDuration, shortDate, seasonEpisode } from '../lib/format.js'
+import { SuggestName } from './SuggestName.jsx'
 
 /**
  * One dense episode line: season/episode · title · date · length · played mark.
@@ -45,6 +46,7 @@ export function EpisodeRow({ ep, show, onPlay }) {
       <span class="body">
         <span class="title">
           {ep.t || (host && <span class="dim">{host}</span>) || <span class="dim">Без назви</span>}
+          {!ep.t && <SuggestName ep={ep} show={show} />}
         </span>
         {(date || (ep.t && host) || (isCurrent && !se)) && (
           <span class="sub">
