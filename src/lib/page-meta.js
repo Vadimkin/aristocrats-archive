@@ -17,6 +17,11 @@ export const OG_IMAGE = 'studio-header.webp'
 export const OG_IMAGE_WIDTH = 1200
 export const OG_IMAGE_HEIGHT = 570
 
+/** "Jazz Time · Архів Аристократів", or the site name alone on the landing page. */
+export function formatTitle(name) {
+  return name ? `${name} · ${SITE}` : SITE
+}
+
 const DESCRIPTION_MAX = 200
 
 export function clipDescription(text) {
@@ -88,7 +93,7 @@ export function homePage(origin, base) {
 
 export function settingsPage(origin, base) {
   return {
-    title: SETTINGS_TITLE,
+    title: formatTitle(SETTINGS_TITLE),
     description: SETTINGS_DESCRIPTION,
     url: absUrl(origin, base, '/settings'),
     ...studioImage(origin, base),
@@ -97,7 +102,7 @@ export function settingsPage(origin, base) {
 
 export function notFoundPage(origin, base) {
   return {
-    title: NOT_FOUND_TITLE,
+    title: formatTitle(NOT_FOUND_TITLE),
     description: NOT_FOUND_DESCRIPTION,
     url: absUrl(origin, base, '/'),
     ...studioImage(origin, base),
@@ -105,9 +110,9 @@ export function notFoundPage(origin, base) {
 }
 
 export function showPage(show, origin, base, coverFile) {
-  const title = fullShowName(show)
+  const name = fullShowName(show)
   const page = {
-    title,
+    title: formatTitle(name),
     description: showDescription(show),
     url: absUrl(origin, base, `/show/${show.slug}`),
   }
@@ -116,7 +121,7 @@ export function showPage(show, origin, base, coverFile) {
     ...page,
     image: absAsset(origin, base, coverFile),
     imageType: imageType(coverFile),
-    imageAlt: title,
+    imageAlt: name,
     card: 'summary',
   }
 }
@@ -155,7 +160,7 @@ export function socialMetaTags(page) {
 }
 
 export function applyPage(html, page) {
-  const tab = page.tabTitle ?? `${page.title} | ${SITE}`
+  const tab = page.tabTitle ?? page.title
   const block = `<!-- social-meta -->\n${socialMetaTags(page)}\n    <!-- /social-meta -->`
   return html
     .replace(/<title>[^<]*<\/title>/, `<title>${esc(tab)}</title>`)

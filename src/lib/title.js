@@ -7,13 +7,13 @@ import {
   OG_IMAGE,
   OG_IMAGE_WIDTH,
   OG_IMAGE_HEIGHT,
+  formatTitle,
   imageType,
   syncDocumentMeta,
 } from './page-meta.js'
 
 // Kept in step with the static <title> in index.html by hand — that one is what
 // shows in the tab until the bundle boots, so the two should read the same.
-const HOME_TITLE = SITE
 
 // What the route wants the tab to say, or null for the landing page. A signal
 // rather than a direct document.title write because playback can override it at
@@ -51,7 +51,7 @@ export function useTitle(text, extras) {
 }
 
 function routePage() {
-  const title = routeTitle.value || SITE
+  const title = formatTitle(routeTitle.value)
   const description = routeDescription.value || SITE_DESCRIPTION
   const url = location.origin + location.pathname
   const image = routeImage.value
@@ -63,7 +63,7 @@ function routePage() {
       url,
       image: href,
       imageType: imageType(href),
-      imageAlt: title,
+      imageAlt: routeTitle.value || SITE,
       card: 'summary',
     }
   }
@@ -89,9 +89,7 @@ effect(() => {
   const item = playing.value ? current.value : null
   document.title = item
     ? `🎧 ${item.t || 'Без назви'} | ${item.showName} | ${SITE}`
-    : routeTitle.value
-      ? `${routeTitle.value} | ${SITE}`
-      : HOME_TITLE
+    : formatTitle(routeTitle.value)
 })
 
 effect(() => {
