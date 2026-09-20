@@ -3,12 +3,13 @@ import { Link } from 'wouter-preact'
 import { exportBlob, exportFilename, importMerge, resetAll } from '../state/storage.js'
 import { Header } from '../components/Header.jsx'
 import { useTitle } from '../lib/title.js'
+import { SETTINGS_DESCRIPTION } from '../lib/page-meta.js'
 
 export function Settings() {
   const [msg, setMsg] = useState(null)
   const [err, setErr] = useState(null)
 
-  useTitle('Налаштування')
+  useTitle('Налаштування', { description: SETTINGS_DESCRIPTION })
 
   function download() {
     const url = URL.createObjectURL(exportBlob())

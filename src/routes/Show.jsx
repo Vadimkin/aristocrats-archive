@@ -9,6 +9,7 @@ import { EpisodeRow } from '../components/EpisodeRow.jsx'
 import { episodeWord, yearSpan, runtime, fullShowName } from '../lib/format.js'
 import { useTitle } from '../lib/title.js'
 import { podcastImage } from '../lib/podcast-image.js'
+import { showDescription, SHOW_NOT_FOUND_DESCRIPTION } from '../lib/page-meta.js'
 
 export function Show({ slug }) {
   const [show, setShow] = useState(null)
@@ -24,7 +25,16 @@ export function Show({ slug }) {
 
   // The name only exists once the show JSON lands, so the tab holds the site
   // title for the moment in between rather than the previous show's name.
-  useTitle(show ? fullShowName(show) : failed ? 'Шоу не знайдено' : null)
+  // Social tags defer until then: a prerendered card should not be replaced
+  // with the homepage one, and navigating between shows should not flash.
+  useTitle(
+    show ? fullShowName(show) : failed ? 'Шоу не знайдено' : null,
+    show
+      ? { description: showDescription(show), image: podcastImage(show.img) }
+      : failed
+        ? { description: SHOW_NOT_FOUND_DESCRIPTION }
+        : { defer: true },
+  )
 
   if (failed || !show) {
     return (

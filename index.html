@@ -6,7 +6,33 @@
     <meta name="color-scheme" content="light dark" />
     <meta name="theme-color" content="#ffffff" media="(prefers-color-scheme: light)" />
     <meta name="theme-color" content="#131316" media="(prefers-color-scheme: dark)" />
+
+    <!-- Social tags. This copy is what crawlers see on `/` without running JS.
+         `src/lib/page-meta.js` is the source of truth — keep the strings in
+         step by hand, the same way the <title> matches useTitle(null). The
+         build rewrites this block onto `/show/<slug>/` and `/settings/` so a
+         shared show link is not always the homepage card. Absolute URLs: OG
+         crawlers refuse relative ones, and Vite does not rewrite `content`. -->
+    <!-- social-meta -->
     <meta name="description" content="Архів Аристократів — фан-каталог подкастів інтернет-радіостанції" />
+    <link rel="canonical" href="https://aristocrats-archive.kyiv.ua/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:locale" content="uk_UA" />
+    <meta property="og:site_name" content="Архів Аристократів" />
+    <meta property="og:title" content="Архів Аристократів" />
+    <meta property="og:description" content="Архів Аристократів — фан-каталог подкастів інтернет-радіостанції" />
+    <meta property="og:url" content="https://aristocrats-archive.kyiv.ua/" />
+    <meta property="og:image" content="https://aristocrats-archive.kyiv.ua/studio-header.webp" />
+    <meta property="og:image:type" content="image/webp" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="570" />
+    <meta property="og:image:alt" content="Архів Аристократів" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="Архів Аристократів" />
+    <meta name="twitter:description" content="Архів Аристократів — фан-каталог подкастів інтернет-радіостанції" />
+    <meta name="twitter:image" content="https://aristocrats-archive.kyiv.ua/studio-header.webp" />
+    <meta name="twitter:image:alt" content="Архів Аристократів" />
+    <!-- /social-meta -->
 
     <!-- Icons and manifest are copied verbatim out of public/, so these paths
          start at the site root and Vite rewrites them onto `base` at build

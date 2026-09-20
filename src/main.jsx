@@ -7,6 +7,7 @@ import { Settings } from './routes/Settings.jsx'
 import { Player } from './components/Player.jsx'
 import { restore, toggle, skip, current } from './state/player.js'
 import { useTitle } from './lib/title.js'
+import { NOT_FOUND_DESCRIPTION } from './lib/page-meta.js'
 import './styles.css'
 
 restore()
@@ -48,7 +49,7 @@ function App() {
 
 // A component rather than inline JSX in the Route, so that it can own the title.
 function NotFound() {
-  useTitle('Не знайдено')
+  useTitle('Не знайдено', { description: NOT_FOUND_DESCRIPTION })
   return (
     <div class="wrap">
       <h1>Не знайдено</h1>
