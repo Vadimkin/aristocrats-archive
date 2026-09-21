@@ -100,6 +100,7 @@ if (audio) {
       time.value = seekOnLoad
     }
     seekOnLoad = 0
+    updatePositionState()
     const item = current.peek()
     if (item && duration.value) {
       mutateQuietly((db) => {
@@ -110,6 +111,7 @@ if (audio) {
 
   audio.addEventListener('timeupdate', () => {
     time.value = audio.currentTime
+    updatePositionState()
     const item = current.peek()
     if (item && !store.peek().episodes[item.id]?.done && nearEnd()) markDone(item)
     persistPosition()
@@ -122,20 +124,31 @@ if (audio) {
   audio.addEventListener('play', () => {
     playing.value = true
     error.value = null
+    // Re-apply on every start, not just on play(): iOS discards the Now Playing
+    // entry of a page it suspended in the background, and a resume from the
+    // lock screen has to put it back or the next tap has nothing to talk to.
+    updateMediaSession(current.peek())
+    setPlaybackState('playing')
   })
   audio.addEventListener('pause', () => {
     playing.value = false
+    // The pause event is queued, so it can land after unload() has already
+    // cleared the entry — don't put a pointless paused one back.
+    setPlaybackState(current.peek() ? 'paused' : 'none')
     persistAndNotify()
   })
   audio.addEventListener('waiting', () => (stalled.value = true))
   audio.addEventListener('playing', () => (stalled.value = false))
   audio.addEventListener('canplay', () => (stalled.value = false))
 
+  audio.addEventListener('seeked', updatePositionState)
+
   // One episode at a time: mark it done and stop rather than rolling on.
   audio.addEventListener('ended', () => {
     const item = current.peek()
     if (item) markDone(item)
     playing.value = false
+    setPlaybackState('paused')
   })
 
   audio.addEventListener('error', () => {
@@ -143,6 +156,7 @@ if (audio) {
     if (!current.peek()) return
     stalled.value = false
     playing.value = false
+    setPlaybackState('paused')
     const code = audio.error?.code
     error.value =
       code === 4
@@ -208,6 +222,7 @@ export function unload(id) {
   audio.pause()
   audio.removeAttribute('src')
   audio.load()
+  clearMediaSession()
   mutateQuietly((db) => {
     db.player = { ...db.player, current: null }
   })
@@ -216,8 +231,27 @@ export function unload(id) {
 
 export function toggle() {
   if (!current.peek()) return
-  if (audio.paused) audio.play().catch(() => (playing.value = false))
+  if (audio.paused) resume()
   else audio.pause()
+}
+
+/**
+ * Start what is already loaded, reattaching the source first if the element
+ * lost it. Locking an iOS device suspends the page, and Safari is free to tear
+ * the media resource down while it is suspended; playing an element in that
+ * state does nothing, which is what makes the lock-screen play button look
+ * dead. Re-setting `src` is synchronous, so this still counts as handling the
+ * gesture, and `seekOnLoad` puts the position back once metadata arrives.
+ */
+export function resume() {
+  const item = current.peek()
+  if (!item) return
+  if (!audio.src || audio.networkState === HTMLMediaElement.NETWORK_EMPTY || audio.error) {
+    seekOnLoad = audio.currentTime || time.peek() || resumePos(item.id)
+    audio.src = audioUrl(item.p)
+    audio.volume = volume.peek()
+  }
+  audio.play().catch(() => (playing.value = false))
 }
 
 export function seek(seconds) {
@@ -257,10 +291,59 @@ const artwork = (filename) => {
   }))
 }
 
+const session = typeof navigator !== 'undefined' ? navigator.mediaSession : null
+
+/** iOS throws NotSupportedError for actions it does not implement — and an
+ *  unhandled throw here would take the rest of the transport down with it. */
+function handler(action, fn) {
+  try {
+    session.setActionHandler(action, fn)
+  } catch {
+    // Not supported on this platform; the other actions still are.
+  }
+}
+
+/**
+ * The lock-screen transport. `play` and `pause` are deliberately separate
+ * commands rather than one toggle: iOS sends the command for the button it
+ * believes it is showing, so resolving it against `audio.paused` turns any
+ * disagreement into the opposite action — tapping play would pause the episode
+ * the system had just resumed, which reads as the button doing nothing.
+ */
+function setupActionHandlers() {
+  if (!session) return
+  handler('play', () => resume())
+  handler('pause', () => audio.pause())
+  handler('stop', () => audio.pause())
+  handler('seekbackward', (d) => skip(-(d.seekOffset || 15)))
+  handler('seekforward', (d) => skip(d.seekOffset || 30))
+  handler('seekto', (d) => d.seekTime != null && seek(d.seekTime))
+}
+
+/** iOS decides which command to send from this, not from the element. */
+function setPlaybackState(state) {
+  if (session) session.playbackState = state
+}
+
+/** Keeps the lock screen's elapsed time honest, and the entry itself alive. */
+function updatePositionState() {
+  if (!session?.setPositionState) return
+  const d = audio.duration
+  if (!Number.isFinite(d) || d <= 0) return
+  try {
+    session.setPositionState({
+      duration: d,
+      playbackRate: audio.playbackRate || 1,
+      position: Math.min(Math.max(audio.currentTime, 0), d),
+    })
+  } catch {
+    // A position outside the duration mid-seek; the next timeupdate is good.
+  }
+}
+
 function updateMediaSession(item) {
-  const ms = navigator.mediaSession
-  if (!ms) return
-  ms.metadata = new MediaMetadata({
+  if (!session || !item) return
+  session.metadata = new MediaMetadata({
     // Same placeholder the rows use: an episode whose title was pure
     // season/episode noise has none, and a blank lock screen looks broken.
     title: item.t || 'Без назви',
@@ -268,12 +351,18 @@ function updateMediaSession(item) {
     album: 'Aristocrats FM',
     artwork: artwork(item.img),
   })
-  ms.setActionHandler('play', () => toggle())
-  ms.setActionHandler('pause', () => toggle())
-  ms.setActionHandler('seekbackward', (d) => skip(-(d.seekOffset || 15)))
-  ms.setActionHandler('seekforward', (d) => skip(d.seekOffset || 30))
-  ms.setActionHandler('seekto', (d) => d.seekTime != null && seek(d.seekTime))
+  updatePositionState()
 }
+
+function clearMediaSession() {
+  if (!session) return
+  session.metadata = null
+  setPlaybackState('none')
+}
+
+// Registered once, not per episode: the lock screen outlives any single
+// play(), and the handlers cost nothing while nothing is loaded.
+if (audio) setupActionHandlers()
 
 // ------------------------------------------------------------------ restore
 
@@ -294,6 +383,7 @@ export function restore() {
   duration.value = db.episodes[item.id]?.dur ?? 0
   audio.src = audioUrl(item.p)
   updateMediaSession(item)
+  setPlaybackState('paused')
 }
 
 /** Persist what the player is doing so a reload can pick it back up. */
