@@ -86,14 +86,16 @@ function routePage() {
 // you have navigated away from the episode you are listening to. Pausing hands
 // the title back to the route. Social tags stay with the route — a shared URL
 // is the page, not whatever happens to be in the player.
-effect(() => {
-  const item = playing.value ? current.value : null
-  document.title = item
-    ? `🎧 ${item.t || 'Без назви'} | ${item.showName} | ${SITE}`
-    : formatTitle(routeTitle.value)
-})
+if (typeof document !== 'undefined') {
+  effect(() => {
+    const item = playing.value ? current.value : null
+    document.title = item
+      ? `🎧 ${item.t || 'Без назви'} | ${item.showName} | ${SITE}`
+      : formatTitle(routeTitle.value)
+  })
 
-effect(() => {
-  if (!metaReady.value) return
-  syncDocumentMeta(routePage())
-})
+  effect(() => {
+    if (!metaReady.value) return
+    syncDocumentMeta(routePage())
+  })
+}

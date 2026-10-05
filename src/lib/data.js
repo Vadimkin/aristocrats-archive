@@ -19,6 +19,5 @@ function load(url) {
   return cache.get(url)
 }
 
-export const loadIndex = () => load('data/index.json')
 export const loadShow = (slug) => load(`data/shows/${encodeURIComponent(slug)}.json`)
 export const loadSearchIndex = () => load('data/search.json')
