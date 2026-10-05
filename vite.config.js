@@ -4,10 +4,12 @@ import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
 import {
   SITE_ORIGIN,
+  absUrl,
   applyPage,
   homePage,
   settingsPage,
   showPage,
+  sitemapXml,
 } from './src/lib/page-meta.js'
 
 // Privacy-friendly analytics by Plausible. Injected here rather than written
@@ -104,11 +106,55 @@ const socialMeta = () => {
   }
 }
 
+// Local calendar day of the build. Episode dates stop in 2022, so lastmod
+// is when this file was generated, not when a show was last recorded.
+function generatedDate() {
+  const d = new Date()
+  const m = String(d.getMonth() + 1).padStart(2, '0')
+  const day = String(d.getDate()).padStart(2, '0')
+  return `${d.getFullYear()}-${m}-${day}`
+}
+
+// `/settings` is a local-storage import/export screen, so it stays out.
+const sitemap = () => {
+  let base = '/'
+  let outDir = 'dist'
+
+  return {
+    name: 'sitemap',
+    apply: 'build',
+    configResolved(config) {
+      base = config.base
+      outDir = config.build.outDir
+    },
+    writeBundle({ dir }) {
+      const dist = dir ?? outDir
+      const origin = siteOrigin()
+      const index = JSON.parse(readFileSync(join(dist, 'data', 'index.json'), 'utf8'))
+      const lastmod = generatedDate()
+
+      const shows = []
+      for (const show of index.shows) {
+        if (!/^[a-z0-9-]+$/i.test(show.slug)) continue
+        shows.push({ loc: absUrl(origin, base, `/show/${show.slug}`), lastmod })
+      }
+
+      const entries = [{ loc: absUrl(origin, base, '/'), lastmod }, ...shows]
+      writeFileSync(join(dist, 'sitemap.xml'), sitemapXml(entries))
+      writeFileSync(
+        join(dist, 'robots.txt'),
+        `User-agent: *\nAllow: /\n\nSitemap: ${absUrl(origin, base, '/sitemap.xml')}\n`,
+      )
+      console.log(`sitemap             ${entries.length} urls`)
+    },
+  }
+}
+
 // Served from the site root. Every emitted URL — the entry script, the CSS,
 // everything copied out of public/ — is built from import.meta.env.BASE_URL
 // rather than hardcoded. For a sub-path deploy: BASE_PATH=/aristocrats/ npm run build.
 export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
-  plugins: [preact(), plausible(), socialMeta()],
+  plugins: [preact(), plausible(), socialMeta(), sitemap()],
   build: { target: 'es2020' },
 })

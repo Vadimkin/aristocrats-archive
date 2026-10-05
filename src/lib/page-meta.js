@@ -159,6 +159,30 @@ export function socialMetaTags(page) {
   return lines.map((line) => `    ${line}`).join('\n')
 }
 
+function xmlEsc(value) {
+  return String(value)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;')
+}
+
+/** Sitemap 0.9 document. Each entry is `{ loc, lastmod? }` with a W3C date. */
+export function sitemapXml(entries) {
+  const urls = entries.map((entry) => {
+    const lines = [`    <loc>${xmlEsc(entry.loc)}</loc>`]
+    if (entry.lastmod) lines.push(`    <lastmod>${xmlEsc(entry.lastmod)}</lastmod>`)
+    return `  <url>\n${lines.join('\n')}\n  </url>`
+  })
+  return (
+    `<?xml version="1.0" encoding="UTF-8"?>\n` +
+    `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n` +
+    `${urls.join('\n')}\n` +
+    `</urlset>\n`
+  )
+}
+
 export function applyPage(html, page) {
   const tab = page.tabTitle ?? page.title
   const block = `<!-- social-meta -->\n${socialMetaTags(page)}\n    <!-- /social-meta -->`
