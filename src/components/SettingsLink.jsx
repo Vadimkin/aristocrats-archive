@@ -1,4 +1,5 @@
 import { Link } from 'wouter-preact'
+import { SETTINGS_PATH } from '../lib/page-meta.js'
 
 // 8-tooth gear on a 20×20 grid, stroked in currentColor so it picks up the
 // link colour and both themes without extra rules.
@@ -12,7 +13,7 @@ const GEAR =
 
 export function SettingsLink() {
   return (
-    <Link class="gear" href="/settings" aria-label="Налаштування" title="Налаштування">
+    <Link class="gear" href={SETTINGS_PATH} aria-label="Налаштування" title="Налаштування">
       <svg
         viewBox="0 0 20 20"
         width="19"

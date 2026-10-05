@@ -21,7 +21,7 @@ import {
 const routeTitle = signal(null)
 const routeDescription = signal(null)
 const routeImage = signal(null)
-// Social tags wait for a route to claim them so a prerendered `/show/<slug>`
+// Social tags wait for a route to claim them so a prerendered `/show/<slug>/`
 // is not overwritten with the homepage card the moment the bundle boots.
 const metaReady = signal(false)
 

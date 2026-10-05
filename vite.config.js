@@ -6,6 +6,7 @@ import {
   SITE_ORIGIN,
   absUrl,
   pageUrl,
+  showPath,
   applyPage,
   homePage,
   settingsPage,
@@ -17,7 +18,7 @@ import {
 // into index.html so that `apply: 'build'` can keep it out of `npm run dev` —
 // a dev session should never show up in the numbers. `window.plausible` is
 // therefore undefined in dev, which src/lib/track.js accounts for. Routes are
-// real paths (`/show/<slug>`), so the tracker's default pathname mode is enough.
+// real paths (`/show/<slug>/`), so the tracker's default pathname mode is enough.
 const PLAUSIBLE_SRC = 'https://beartown.vadymklymenko.com/js/pa-Il2qsxEUkuDeoMA48acvq.js'
 
 const plausible = () => ({
@@ -40,7 +41,7 @@ const siteOrigin = () =>
   (process.env.SITE_ORIGIN ?? process.env.VITE_SITE_ORIGIN ?? SITE_ORIGIN).replace(/\/$/, '')
 
 // Facebook / Telegram / Slack fetch the URL and do not run JS, so a shared
-// `/show/<slug>` would otherwise always unfurl as the homepage (nginx
+// `/show/<slug>/` would otherwise always unfurl as the homepage (nginx
 // try_files falls unknown paths back to index.html). The same shell is
 // copied under each route with that page's tags; try_files $uri/ then
 // serves `show/<slug>/index.html` first.
@@ -137,7 +138,7 @@ const sitemap = () => {
       const shows = []
       for (const show of index.shows) {
         if (!/^[a-z0-9-]+$/i.test(show.slug)) continue
-        shows.push({ loc: pageUrl(origin, base, `/show/${show.slug}`), lastmod })
+        shows.push({ loc: pageUrl(origin, base, showPath(show.slug)), lastmod })
       }
 
       const entries = [{ loc: pageUrl(origin, base, '/'), lastmod }, ...shows]

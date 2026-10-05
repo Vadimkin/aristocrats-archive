@@ -5,6 +5,7 @@ import {
   toggle, seek,
 } from '../state/player.js'
 import { duration as fmtDuration, shortDate } from '../lib/format.js'
+import { showPath } from '../lib/page-meta.js'
 
 export function Player() {
   const el = useRef(null)
@@ -93,7 +94,7 @@ function Sheet({ item, dur }) {
       </div>
 
       <div class="sheet-row">
-        <Link href={`/show/${item.slug}`} onClick={() => (expanded.value = false)}>
+        <Link href={showPath(item.slug)} onClick={() => (expanded.value = false)}>
           {item.showName} →
         </Link>
       </div>

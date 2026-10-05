@@ -64,6 +64,13 @@ export function absUrl(origin, base, path = '/') {
   return `${a}${b}${path.startsWith('/') ? path : `/${path}`}`
 }
 
+/** In-app path of a show page. Always has a trailing slash. */
+export function showPath(slug) {
+  return `/show/${slug}/`
+}
+
+export const SETTINGS_PATH = '/settings/'
+
 /** Page address, always with a trailing slash. Files such as sitemap.xml stay on absUrl. */
 export function pageUrl(origin, base, path = '/') {
   const url = absUrl(origin, base, path)
@@ -101,7 +108,7 @@ export function settingsPage(origin, base) {
   return {
     title: formatTitle(SETTINGS_TITLE),
     description: SETTINGS_DESCRIPTION,
-    url: pageUrl(origin, base, '/settings'),
+    url: pageUrl(origin, base, SETTINGS_PATH),
     ...studioImage(origin, base),
   }
 }
@@ -120,7 +127,7 @@ export function showPage(show, origin, base, coverFile) {
   const page = {
     title: formatTitle(name),
     description: showDescription(show),
-    url: pageUrl(origin, base, `/show/${show.slug}`),
+    url: pageUrl(origin, base, showPath(show.slug)),
   }
   if (!coverFile) return { ...page, ...studioImage(origin, base) }
   return {

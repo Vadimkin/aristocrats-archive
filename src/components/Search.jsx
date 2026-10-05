@@ -6,6 +6,7 @@ import { doneByShow } from '../state/listening.js'
 import { play, toItem } from '../state/player.js'
 import { Highlight } from '../lib/highlight.jsx'
 import { yearSpan, episodeWord, showWord, fullShowName, shortDate } from '../lib/format.js'
+import { showPath } from '../lib/page-meta.js'
 
 const LIMIT = 60
 
@@ -95,7 +96,7 @@ function ShowHit({ show, query }) {
   return (
     <div class={`row show-row${complete ? ' is-done' : ''}`}>
       <span class="grow">
-        <Link class="name" href={`/show/${show.slug}`}>
+        <Link class="name" href={showPath(show.slug)}>
           <Highlight text={show.name} query={query} />
           {show.host && (
             <span class="host"> <Highlight text={show.host} query={query} /></span>
@@ -133,7 +134,7 @@ function EpisodeHit({ hit, show, query }) {
           {hit.date && ` · ${shortDate(hit.date)}`}
         </div>
       </button>
-      <Link class="meta" href={`/show/${hit.slug}`} aria-label={`Перейти до ${showName}`}>
+      <Link class="meta" href={showPath(hit.slug)} aria-label={`Перейти до ${showName}`}>
         →
       </Link>
     </div>

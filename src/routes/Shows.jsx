@@ -8,6 +8,7 @@ import { Header } from '../components/Header.jsx'
 import { SearchResults } from '../components/Search.jsx'
 import { yearSpan, episodeWord, showWord, grouped, hours, duration as fmtDuration } from '../lib/format.js'
 import { useTitle } from '../lib/title.js'
+import { showPath } from '../lib/page-meta.js'
 
 export function Shows() {
   const [data, setData] = useState(null)
@@ -96,7 +97,7 @@ function ShowRow({ show }) {
   return (
     <div class={`row show-row${complete ? ' is-done' : ''}`}>
       <span class="grow">
-        <Link class="name" href={`/show/${show.slug}`}>
+        <Link class="name" href={showPath(show.slug)}>
           {show.name}
           {show.host && <span class="host"> {show.host}</span>}
         </Link>
@@ -159,7 +160,7 @@ function ContinueSection() {
             </button>
             <button
               class="meta"
-              onClick={() => navigate(`/show/${item.slug}`)}
+              onClick={() => navigate(showPath(item.slug))}
               aria-label={`Перейти до ${item.showName}`}
             >
               →

@@ -16,18 +16,37 @@ restore()
 // (not replaceState) so this also works when the hash is applied to an already
 // mounted page — wouter only reads pathname, and replaceState would leave it
 // on `/`. BASE_URL is `/` on the root deploy and `/aristocrats/` on a sub-path
-// one — strip the trailing slash so `/show/foo` lands at
-// `/aristocrats/show/foo`, not `/aristocrats//show/foo`.
+// one — strip the trailing slash from the base so `/show/foo/` lands at
+// `/aristocrats/show/foo/`, not `/aristocrats//show/foo/`.
 function redirectLegacyHash() {
   const hash = location.hash
   if (!hash.startsWith('#/')) return false
   const base = import.meta.env.BASE_URL.replace(/\/$/, '')
-  location.replace(base + hash.slice(1) + location.search)
+  location.replace(base + withTrailingSlash(hash.slice(1)) + location.search)
   return true
 }
 
+// nginx 301s a directory onto its slash form. Do the same in the app so a
+// client navigation, a dev session, and the address bar all use that URL.
+function ensureTrailingSlash() {
+  if (location.pathname.endsWith('/')) return
+  history.replaceState(history.state, '', `${location.pathname}/${location.search}${location.hash}`)
+}
+
+function withTrailingSlash(path) {
+  const q = path.indexOf('?')
+  const pathname = q === -1 ? path : path.slice(0, q)
+  const search = q === -1 ? '' : path.slice(q)
+  return pathname.endsWith('/') ? path : `${pathname}/${search}`
+}
+
 const leavingForPath = redirectLegacyHash()
-if (!leavingForPath) addEventListener('hashchange', redirectLegacyHash)
+if (!leavingForPath) {
+  addEventListener('hashchange', redirectLegacyHash)
+  ensureTrailingSlash()
+  addEventListener('popstate', ensureTrailingSlash)
+  addEventListener('pushState', ensureTrailingSlash)
+}
 
 const routerBase = import.meta.env.BASE_URL.replace(/\/$/, '')
 
@@ -38,8 +57,8 @@ function App() {
     <Router base={routerBase}>
       <Switch>
         <Route path="/" component={Shows} />
-        <Route path="/show/:slug">{(params) => <Show slug={params.slug} />}</Route>
-        <Route path="/settings" component={Settings} />
+        <Route path="/show/:slug/">{(params) => <Show slug={params.slug} />}</Route>
+        <Route path="/settings/" component={Settings} />
         <Route component={NotFound} />
       </Switch>
       <Player />
