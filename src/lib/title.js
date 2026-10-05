@@ -53,7 +53,8 @@ export function useTitle(text, extras) {
 function routePage() {
   const title = formatTitle(routeTitle.value)
   const description = routeDescription.value || SITE_DESCRIPTION
-  const url = location.origin + location.pathname
+  const path = location.pathname.endsWith('/') ? location.pathname : `${location.pathname}/`
+  const url = location.origin + path
   const image = routeImage.value
   if (image) {
     const href = new URL(image, location.href).href

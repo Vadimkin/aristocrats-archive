@@ -64,6 +64,12 @@ export function absUrl(origin, base, path = '/') {
   return `${a}${b}${path.startsWith('/') ? path : `/${path}`}`
 }
 
+/** Page address, always with a trailing slash. Files such as sitemap.xml stay on absUrl. */
+export function pageUrl(origin, base, path = '/') {
+  const url = absUrl(origin, base, path)
+  return url.endsWith('/') ? url : `${url}/`
+}
+
 export function absAsset(origin, base, file) {
   const a = origin.replace(/\/$/, '')
   const b = base.endsWith('/') ? base : `${base}/`
@@ -86,7 +92,7 @@ export function homePage(origin, base) {
     title: SITE,
     tabTitle: SITE,
     description: SITE_DESCRIPTION,
-    url: absUrl(origin, base, '/'),
+    url: pageUrl(origin, base, '/'),
     ...studioImage(origin, base),
   }
 }
@@ -95,7 +101,7 @@ export function settingsPage(origin, base) {
   return {
     title: formatTitle(SETTINGS_TITLE),
     description: SETTINGS_DESCRIPTION,
-    url: absUrl(origin, base, '/settings'),
+    url: pageUrl(origin, base, '/settings'),
     ...studioImage(origin, base),
   }
 }
@@ -104,7 +110,7 @@ export function notFoundPage(origin, base) {
   return {
     title: formatTitle(NOT_FOUND_TITLE),
     description: NOT_FOUND_DESCRIPTION,
-    url: absUrl(origin, base, '/'),
+    url: pageUrl(origin, base, '/'),
     ...studioImage(origin, base),
   }
 }
@@ -114,7 +120,7 @@ export function showPage(show, origin, base, coverFile) {
   const page = {
     title: formatTitle(name),
     description: showDescription(show),
-    url: absUrl(origin, base, `/show/${show.slug}`),
+    url: pageUrl(origin, base, `/show/${show.slug}`),
   }
   if (!coverFile) return { ...page, ...studioImage(origin, base) }
   return {

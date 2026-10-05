@@ -5,6 +5,7 @@ import { join } from 'node:path'
 import {
   SITE_ORIGIN,
   absUrl,
+  pageUrl,
   applyPage,
   homePage,
   settingsPage,
@@ -136,10 +137,10 @@ const sitemap = () => {
       const shows = []
       for (const show of index.shows) {
         if (!/^[a-z0-9-]+$/i.test(show.slug)) continue
-        shows.push({ loc: absUrl(origin, base, `/show/${show.slug}`), lastmod })
+        shows.push({ loc: pageUrl(origin, base, `/show/${show.slug}`), lastmod })
       }
 
-      const entries = [{ loc: absUrl(origin, base, '/'), lastmod }, ...shows]
+      const entries = [{ loc: pageUrl(origin, base, '/'), lastmod }, ...shows]
       writeFileSync(join(dist, 'sitemap.xml'), sitemapXml(entries))
       writeFileSync(
         join(dist, 'robots.txt'),
