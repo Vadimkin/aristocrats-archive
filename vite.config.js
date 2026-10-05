@@ -1,7 +1,8 @@
 import { defineConfig } from 'vite'
 import preact from '@preact/preset-vite'
-import { mkdirSync, readFileSync, writeFileSync } from 'node:fs'
+import { existsSync, readFileSync, writeFileSync } from 'node:fs'
 import { join } from 'node:path'
+import { fileURLToPath } from 'node:url'
 import {
   SITE_ORIGIN,
   absUrl,
@@ -13,6 +14,8 @@ import {
   showPage,
   sitemapXml,
 } from './src/lib/page-meta.js'
+
+const prerenderScript = fileURLToPath(new URL('./src/prerender.jsx', import.meta.url))
 
 // Privacy-friendly analytics by Plausible. Injected here rather than written
 // into index.html so that `apply: 'build'` can keep it out of `npm run dev` —
@@ -66,12 +69,6 @@ const socialMeta = () => {
     }
   }
 
-  const write = (dist, relative, html) => {
-    const file = join(dist, relative)
-    mkdirSync(join(file, '..'), { recursive: true })
-    writeFileSync(file, html)
-  }
-
   return {
     name: 'social-meta',
     configResolved(config) {
@@ -87,19 +84,25 @@ const socialMeta = () => {
     writeBundle({ dir }) {
       const dist = dir ?? outDir
       const origin = siteOrigin()
-      const html = readFileSync(join(dist, 'index.html'), 'utf8')
       const index = JSON.parse(readFileSync(join(dist, 'data', 'index.json'), 'utf8'))
 
-      write(dist, join('settings', 'index.html'), applyPage(html, settingsPage(origin, base)))
+      // Prerender already wrote each page's body. Stamp that file's head so a
+      // shared link unfurls as the page itself, and leave the rendered markup.
+      const stamp = (file, page) => {
+        if (!existsSync(file)) throw new Error(`prerendered page missing: ${file}`)
+        writeFileSync(file, applyPage(readFileSync(file, 'utf8'), page))
+      }
+
+      stamp(join(dist, 'index.html'), homePage(origin, base))
+      stamp(join(dist, 'settings', 'index.html'), settingsPage(origin, base))
 
       let shows = 0
       for (const show of index.shows) {
         if (!/^[a-z0-9-]+$/i.test(show.slug)) continue
         const cover = show.img ? covers.get(show.img) : null
-        write(
-          dist,
-          join('show', show.slug, 'index.html'),
-          applyPage(html, showPage(show, origin, base, cover)),
+        stamp(
+          join(dist, 'show', show.slug, 'index.html'),
+          showPage(show, origin, base, cover),
         )
         shows++
       }
@@ -157,6 +160,18 @@ const sitemap = () => {
 // rather than hardcoded. For a sub-path deploy: BASE_PATH=/aristocrats/ npm run build.
 export default defineConfig({
   base: process.env.BASE_PATH ?? '/',
-  plugins: [preact(), plausible(), socialMeta(), sitemap()],
+  plugins: [
+    preact({
+      prerender: {
+        enabled: true,
+        renderTarget: '#app',
+        prerenderScript,
+        previewMiddlewareEnabled: true,
+      },
+    }),
+    plausible(),
+    socialMeta(),
+    sitemap(),
+  ],
   build: { target: 'es2020' },
 })

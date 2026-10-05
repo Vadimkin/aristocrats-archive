@@ -1,5 +1,6 @@
 // Exports db/aristocrats.db into the small chunks the site loads lazily:
 //   public/data/index.json          — 148 shows, era-grouped
+//   src/data/index.json             — the same file, imported by the list page
 //   public/data/shows/<slug>.json   — episodes of one show
 //   public/data/search.json         — flat haystack for global episode search
 //
@@ -27,6 +28,7 @@ import { eras, vEpisodes, vSearch, vShowIndex } from '../db/schema.js'
 
 const ROOT = join(dirname(fileURLToPath(import.meta.url)), '..')
 const OUT = join(ROOT, 'public', 'data')
+const SRC_INDEX = join(ROOT, 'src', 'data', 'index.json')
 
 // Optional keys are `undefined` rather than null so JSON.stringify drops them.
 const drop = (v) => v || undefined
@@ -93,22 +95,22 @@ function build() {
   // SQLite has no Ukrainian collation, so this one sort stays in JS.
   index.sort((a, b) => a.name.localeCompare(b.name, 'uk'))
 
-  writeFileSync(
-    join(OUT, 'index.json'),
-    JSON.stringify({
-      shows: index,
-      eras: db
-        .select({ id: eras.id, label: eras.label })
-        .from(eras)
-        .orderBy(asc(eras.ord))
-        .all(),
-      totals: {
-        shows: index.length,
-        episodes: episodeCount,
-        seconds: grandSeconds,
-      },
-    }),
-  )
+  const indexJson = JSON.stringify({
+    shows: index,
+    eras: db
+      .select({ id: eras.id, label: eras.label })
+      .from(eras)
+      .orderBy(asc(eras.ord))
+      .all(),
+    totals: {
+      shows: index.length,
+      episodes: episodeCount,
+      seconds: grandSeconds,
+    },
+  })
+  writeFileSync(join(OUT, 'index.json'), indexJson)
+  mkdirSync(join(SRC_INDEX, '..'), { recursive: true })
+  writeFileSync(SRC_INDEX, indexJson)
 
   writeFileSync(join(OUT, 'search.json'), JSON.stringify(searchRows(db)))
 

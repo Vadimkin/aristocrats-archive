@@ -10,8 +10,6 @@ import { useTitle } from './lib/title.js'
 import { NOT_FOUND_DESCRIPTION } from './lib/page-meta.js'
 import './styles.css'
 
-restore()
-
 // Old bookmarks and shared links used `#/show/<slug>`. `location.replace`
 // (not replaceState) so this also works when the hash is applied to an already
 // mounted page — wouter only reads pathname, and replaceState would leave it
@@ -40,21 +38,13 @@ function withTrailingSlash(path) {
   return pathname.endsWith('/') ? path : `${pathname}/${search}`
 }
 
-const leavingForPath = redirectLegacyHash()
-if (!leavingForPath) {
-  addEventListener('hashchange', redirectLegacyHash)
-  ensureTrailingSlash()
-  addEventListener('popstate', ensureTrailingSlash)
-  addEventListener('pushState', ensureTrailingSlash)
-}
-
 const routerBase = import.meta.env.BASE_URL.replace(/\/$/, '')
 
-function App() {
+export function App({ ssrPath } = {}) {
   useKeyboardShortcuts()
 
   return (
-    <Router base={routerBase}>
+    <Router base={routerBase} ssrPath={ssrPath}>
       <Switch>
         <Route path="/" component={Shows} />
         <Route path="/show/:slug/">{(params) => <Show slug={params.slug} />}</Route>
@@ -105,4 +95,14 @@ function useKeyboardShortcuts() {
   }, [])
 }
 
-if (!leavingForPath) render(<App />, document.getElementById('app'))
+if (typeof window !== 'undefined') {
+  restore()
+  const leavingForPath = redirectLegacyHash()
+  if (!leavingForPath) {
+    addEventListener('hashchange', redirectLegacyHash)
+    ensureTrailingSlash()
+    addEventListener('popstate', ensureTrailingSlash)
+    addEventListener('pushState', ensureTrailingSlash)
+    render(<App />, document.getElementById('app'))
+  }
+}

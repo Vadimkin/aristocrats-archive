@@ -1,6 +1,5 @@
-import { useEffect, useState } from 'preact/hooks'
 import { Link, useLocation } from 'wouter-preact'
-import { loadIndex } from '../lib/data.js'
+import catalog from '../data/index.json'
 import { doneByShow, inProgress, favSlugs, forgetPosition } from '../state/listening.js'
 import { play, unload } from '../state/player.js'
 import { query } from '../state/search.js'
@@ -11,14 +10,7 @@ import { useTitle } from '../lib/title.js'
 import { showPath } from '../lib/page-meta.js'
 
 export function Shows() {
-  const [data, setData] = useState(null)
-  const [failed, setFailed] = useState(false)
-
   useTitle(null)
-
-  useEffect(() => {
-    loadIndex().then(setData, () => setFailed(true))
-  }, [])
 
   const q = query.value.trim().toLowerCase()
 
@@ -38,17 +30,14 @@ export function Shows() {
         </div>
       </div>
       <div class="wrap">
-        {failed && <p class="empty">Не вдалося завантажити список шоу.</p>}
-        {!data && !failed && <p class="loading">Завантаження…</p>}
+        {q && <SearchResults query={q} shows={catalog.shows} />}
 
-        {data && q && <SearchResults query={q} shows={data.shows} />}
-
-        {data && !q && (
+        {!q && (
           <>
             <ContinueSection />
-            <FavouritesSection shows={data.shows} />
-            {data.eras.map((era) => {
-              const list = data.shows.filter((s) => s.era === era.id)
+            <FavouritesSection shows={catalog.shows} />
+            {catalog.eras.map((era) => {
+              const list = catalog.shows.filter((s) => s.era === era.id)
               if (!list.length) return null
               return (
                 <section key={era.id}>
@@ -70,13 +59,11 @@ export function Shows() {
         )}
 
         <div class="footer">
-          {data && (
-            <div>
-              {grouped(data.totals.shows)} {showWord(data.totals.shows)} ·{' '}
-              {grouped(data.totals.episodes)} {episodeWord(data.totals.episodes)} ·{' '}
-              {hours(data.totals.seconds)} ефіру
-            </div>
-          )}
+          <div>
+            {grouped(catalog.totals.shows)} {showWord(catalog.totals.shows)} ·{' '}
+            {grouped(catalog.totals.episodes)} {episodeWord(catalog.totals.episodes)} ·{' '}
+            {hours(catalog.totals.seconds)} ефіру
+          </div>
           <p class="footer-notice">
             Всі права належать{' '}
             <a href="https://www.facebook.com/aristocratsfm/" target="_blank" rel="noopener noreferrer">Радіо Аристократи</a>
