@@ -107,6 +107,14 @@ one:
 INSERT INTO show_overrides (show_id, name) VALUES (12, 'Правильна назва');
 ```
 
+Episode titles accepted by hand (the suggest-a-name form) live in
+`scripts/data/title-overrides.json`, keyed by episode id. `db:import` writes them
+after the upsert, so they win over the filename parser and survive a re-seed:
+
+```json
+{ "7sts6f02a5vt": "Правильна назва" }
+```
+
 `NULL` in an override column means "no opinion, use the derived value". Note that the `sqlite3`
 CLI has foreign keys **off** by default, so a typo'd id inserts a silently dangling row —
 `PRAGMA foreign_keys=ON;` first, or use `npm run db:studio`.

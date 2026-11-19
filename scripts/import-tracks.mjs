@@ -1,11 +1,13 @@
 // Seeds db/aristocrats.db from the archive listing.
 //
-//   scripts/data/{tracks,durations}.json  ->  db/aristocrats.db
+//   scripts/data/{tracks,durations,title-overrides}.json  ->  db/aristocrats.db
 //
 // This is where every regex in the pipeline runs: the filename is parsed once,
 // here, and the result is stored. `npm run data` then only queries. Safe to
 // re-run — it upserts only derived columns, so hand fixes in `show_overrides`,
-// aristocrats.fm metadata, and probed `episodes.duration` all survive.
+// `title-overrides.json`, aristocrats.fm metadata, and probed
+// `episodes.duration` all survive. A title override is applied after the
+// upsert, so it wins over the filename parser.
 //
 // Run: npm run db:import
 
@@ -101,7 +103,7 @@ function deriveShow(show, ord, seenSlugs, seenIds, maxYear, stats) {
 
 // ---------------------------------------------------------------- persist
 
-function persist(db, sqlite, derived, legacyDurations) {
+function persist(db, sqlite, derived, legacyDurations, titleOverrides) {
   // `ord` and `slug` are UNIQUE, and inserting a show into the middle of
   // tracks.json shifts every ord after it. SQLite enforces uniqueness per
   // statement, not at commit, so park the current values somewhere collision-
@@ -205,7 +207,25 @@ function persist(db, sqlite, derived, legacyDurations) {
     }
   }
 
-  return { droppedShows, droppedEpisodes, seededDurations }
+  // Accepted titles (the suggest-a-name form). Applied after the upsert so a
+  // re-seed does not put the filename-derived title back. A missing id is
+  // reported, not fatal: the episode may have left the archive.
+  const titles = applyTitleOverrides(sqlite, titleOverrides)
+
+  return { droppedShows, droppedEpisodes, seededDurations, ...titles }
+}
+
+function applyTitleOverrides(sqlite, overrides) {
+  if (!overrides) return { appliedTitles: 0, missingTitles: [] }
+  const update = sqlite.prepare('UPDATE episodes SET title = ? WHERE id = ?')
+  const missingTitles = []
+  let appliedTitles = 0
+  for (const [id, title] of Object.entries(overrides)) {
+    if (typeof title !== 'string') continue
+    if (update.run(title, id).changes) appliedTitles += 1
+    else missingTitles.push(id)
+  }
+  return { appliedTitles, missingTitles }
 }
 
 // ------------------------------------------------------------------ main
@@ -218,6 +238,11 @@ function main() {
   const durationsPath = join(DATA, 'durations.json')
   const legacyDurations = existsSync(durationsPath)
     ? JSON.parse(readFileSync(durationsPath, 'utf8'))
+    : null
+
+  const titlesPath = join(DATA, 'title-overrides.json')
+  const titleOverrides = existsSync(titlesPath)
+    ? JSON.parse(readFileSync(titlesPath, 'utf8'))
     : null
 
   const maxYear = defaultMaxYear()
@@ -234,7 +259,7 @@ function main() {
 
   const { db, sqlite } = open()
   const counts = sqlite.transaction(() =>
-    persist(db, sqlite, derived, legacyDurations),
+    persist(db, sqlite, derived, legacyDurations, titleOverrides),
   )()
 
   db.insert(meta)
@@ -278,6 +303,12 @@ function report(sqlite, stats, counts) {
   console.log(`total runtime      ${Math.floor(seconds / 3600)} h`)
   if (counts.seededDurations) {
     console.log(`seeded durations   ${counts.seededDurations} from durations.json`)
+  }
+  if (counts.appliedTitles) {
+    console.log(`title overrides    ${counts.appliedTitles} from title-overrides.json`)
+  }
+  if (counts.missingTitles.length) {
+    console.log(`title overrides    missing ${counts.missingTitles.join(', ')}`)
   }
   if (counts.droppedShows || counts.droppedEpisodes) {
     console.log(`removed            ${counts.droppedShows} shows, ${counts.droppedEpisodes} episodes no longer in the archive`)
